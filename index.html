@@ -1112,7 +1112,1364 @@ img.exercise-image,
   }
 }
 
+  /* === MODIFICAREA #1: BEST SET / RECORD PERSONAL (STEALTH OLED) === */
 
+/* 1. Blocul dedicat din modalul de detalii al exercițiului */
+.best-set-modal-box {
+  background: linear-gradient(135deg, rgba(255, 77, 0, 0.08) 0%, rgba(20, 20, 24, 0.96) 65%);
+  border: 1px solid rgba(255, 77, 0, 0.24);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+
+.best-set-modal-box.is-empty {
+  background: #18181C;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.best-set-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.best-set-modal-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #FF4D00;
+}
+
+.best-set-modal-box.is-empty .best-set-modal-title {
+  color: #8E8E93;
+}
+
+.best-set-modal-date {
+  font-size: 11px;
+  color: #8E8E93;
+  font-variant-numeric: tabular-nums;
+}
+
+.best-set-modal-metrics {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.best-set-main-val {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #F5F5F7;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.best-set-1rm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #E4E4E7;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 2. Badge discret pe cardul din Biblioteca Exerciții */
+.best-set-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 77, 0, 0.1);
+  border: 1px solid rgba(255, 77, 0, 0.22);
+  color: #FF7A40;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* 3. Bara compactă de Record & Țintă PR din Antrenamentul Activ */
+.workout-pr-bar {
+  margin-top: 8px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: #18181C;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.workout-pr-bar.has-new-pr {
+  background: linear-gradient(135deg, rgba(255, 77, 0, 0.14) 0%, rgba(24, 24, 28, 0.96) 75%);
+  border-color: rgba(255, 77, 0, 0.4);
+}
+
+.workout-pr-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.workout-pr-record {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #F5F5F7;
+  font-variant-numeric: tabular-nums;
+}
+
+.workout-pr-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: #A1A1AA;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+
+.workout-pr-target strong {
+  color: #F5F5F7;
+  font-weight: 600;
+}
+
+.pr-new-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #FF4D00;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px rgba(255, 77, 0, 0.45);
+}
+
+
+
+/* === MODIFICAREA #2: SUB-GRUPE ANATOMICE, ALTERNATIVE & SWAP RAPID (STEALTH OLED) === */
+
+/* Asigură scroll curat pe modalul de detalii când conținutul + alternativele depășesc ecranul telefonului */
+.bg-\[\#111114\]:has(.alt-detail-section) {
+  max-height: 90dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 1. Badge discret cu sub-grupa anatomică exactă (în modalul de detalii și în modalul de swap) */
+.submuscle-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 77, 0, 0.1);
+  border: 1px solid rgba(255, 77, 0, 0.24);
+  color: #FF7A40;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* 2. Secțiunea „Alternative pentru [subMuscle]” din modalul de detalii al exercițiului */
+.alt-detail-section {
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 13px 14px;
+  margin-top: 10px;
+}
+
+.alt-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.alt-detail-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #F5F5F7;
+  letter-spacing: 0.01em;
+}
+
+.alt-detail-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E8E93;
+  font-variant-numeric: tabular-nums;
+}
+
+.alt-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-height: 195px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 2px;
+}
+
+.alt-detail-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: #18181C;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.alt-detail-item:hover {
+  background: #1F1F25;
+  border-color: rgba(255, 77, 0, 0.38);
+}
+
+.alt-detail-item:active {
+  transform: scale(0.985);
+}
+
+.alt-detail-item-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.alt-detail-item-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #F5F5F7;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alt-detail-item-meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: #8E8E93;
+  font-variant-numeric: tabular-nums;
+}
+
+.alt-pr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #FF7A40;
+  font-weight: 600;
+}
+
+/* 3. Butonul compact „Alternative” din antetul fiecărui exercițiu în Workout Activ */
+.workout-swap-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 12px;
+  background: #18181C;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: #D4D4D8;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms ease;
+}
+
+.workout-swap-btn:hover {
+  background: rgba(255, 77, 0, 0.12);
+  border-color: rgba(255, 77, 0, 0.4);
+  color: #FFFFFF;
+}
+
+.workout-swap-btn:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 390px) {
+  .workout-swap-btn .swap-btn-label {
+    display: none;
+  }
+  .workout-swap-btn {
+    width: 36px;
+    padding: 0;
+  }
+}
+
+/* 4. Fereastra modală dedicată pentru înlocuirea rapidă la sală */
+.swap-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px;
+}
+
+@media (min-width: 640px) {
+  .swap-modal-backdrop {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+.swap-modal-panel {
+  width: 100%;
+  max-width: 460px;
+  max-height: 84dvh;
+  background: #111114;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.swap-modal-head {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.swap-modal-body {
+  padding: 12px 14px 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swap-alt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: #18181C;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.swap-alt-row:hover {
+  border-color: rgba(255, 77, 0, 0.35);
+  background: #1D1D22;
+}
+
+.swap-alt-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  isolation: isolate;
+}
+
+.swap-alt-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: contrast(1.2) invert(1) brightness(0.95);
+  mix-blend-mode: screen;
+}
+
+.swap-action-btn {
+  padding: 8px 13px;
+  border-radius: 11px;
+  background: #FF4D00;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 150ms ease, transform 120ms ease;
+}
+
+.swap-action-btn:hover {
+  background: #FF621F;
+}
+
+.swap-action-btn:active {
+  transform: scale(0.96);
+}
+
+.swap-in-workout-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #A1A1AA;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* === MODIFICAREA #3: SCANNER ANATOMIC NEON OLED (VIZIBILITATE MAXIMĂ) === */
+
+/* Adâncime discretă în fundalul cardului ca silueta neon să iasă curat în evidență */
+.anatomy-card {
+  background:
+    radial-gradient(ellipse at 50% 44%, rgba(0, 229, 255, 0.045) 0%, transparent 72%),
+    #111114;
+}
+
+/* 1. Silueta / „Scheletul” corpului — argintiu-cyan clar și vizibil la 20% luminozitate */
+.anatomy-svg .anatomy-silhouette {
+  fill: #161C29;
+  stroke: rgba(186, 230, 253, 0.72);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px rgba(148, 210, 255, 0.35));
+}
+
+/* Linii anatomice interne (clavicule, abdomen, coloană) mai clare */
+.anatomy-svg .anatomy-detail-line {
+  stroke: rgba(186, 230, 253, 0.28);
+  stroke-width: 1.05;
+}
+
+.anatomy-view-label {
+  color: #94A3B8;
+}
+
+/* 2. Paleta NEON — Modul Forță 1RM */
+
+/* Neinițiat (0 kg): vizibil și delimitat clar de fundalul negru OLED */
+.anatomy-svg .anatomy-muscle-zone.level-neinitiat {
+  filter: none;
+}
+
+.anatomy-svg .anatomy-muscle-zone.level-neinitiat path {
+  fill: #2A3347;
+  fill-opacity: 0.94;
+  stroke: #64748B;
+  stroke-width: 1.15;
+}
+
+/* Începător: Verde Neon (#00FF88) */
+.anatomy-svg .anatomy-muscle-zone.level-incepator {
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.65));
+}
+
+.anatomy-svg .anatomy-muscle-zone.level-incepator path {
+  fill: #00FF88;
+  fill-opacity: 0.9;
+  stroke: #80FFBF;
+  stroke-width: 1.05;
+}
+
+/* Intermediar: Cyan / Albastru Neon (#00E5FF) */
+.anatomy-svg .anatomy-muscle-zone.level-intermediar {
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.68));
+}
+
+.anatomy-svg .anatomy-muscle-zone.level-intermediar path {
+  fill: #00E5FF;
+  fill-opacity: 0.92;
+  stroke: #8CF3FF;
+  stroke-width: 1.05;
+}
+
+/* Avansat: Violet / Magenta Neon (#C04BFF) */
+.anatomy-svg .anatomy-muscle-zone.level-avansat {
+  filter: drop-shadow(0 0 6px rgba(192, 75, 255, 0.72));
+}
+
+.anatomy-svg .anatomy-muscle-zone.level-avansat path {
+  fill: #C04BFF;
+  fill-opacity: 0.92;
+  stroke: #E4ADFF;
+  stroke-width: 1.05;
+}
+
+/* Elită: Portocaliu-Auriu Neon (#FF6B00 cu contur/glow #FFD600) */
+.anatomy-svg .anatomy-muscle-zone.level-elita {
+  filter: drop-shadow(0 0 6px rgba(255, 214, 0, 0.78));
+}
+
+.anatomy-svg .anatomy-muscle-zone.level-elita path {
+  fill: #FF6B00;
+  fill-opacity: 0.96;
+  stroke: #FFD600;
+  stroke-width: 1.25;
+}
+
+/* 3. Paleta NEON — Modul Recuperare */
+
+/* Sub 50% (Obosit / Odihnă): Roșu-Coral Neon (#FF2E55) */
+.anatomy-svg .anatomy-muscle-zone.rec-low {
+  filter: drop-shadow(0 0 6px rgba(255, 46, 85, 0.72));
+}
+
+.anatomy-svg .anatomy-muscle-zone.rec-low,
+.anatomy-svg .anatomy-muscle-zone.rec-low path {
+  fill: #FF2E55;
+  fill-opacity: 0.92;
+  stroke: #FF8FA3;
+  stroke-width: 1.05;
+}
+
+/* 50–89% (În refacere): Galben-Chihlimbar Neon (#FFD600) */
+.anatomy-svg .anatomy-muscle-zone.rec-mid,
+.anatomy-svg .anatomy-muscle-zone.rec-high {
+  filter: drop-shadow(0 0 6px rgba(255, 214, 0, 0.68));
+}
+
+.anatomy-svg .anatomy-muscle-zone.rec-mid,
+.anatomy-svg .anatomy-muscle-zone.rec-mid path,
+.anatomy-svg .anatomy-muscle-zone.rec-high,
+.anatomy-svg .anatomy-muscle-zone.rec-high path {
+  fill: #FFD600;
+  fill-opacity: 0.9;
+  stroke: #FFF099;
+  stroke-width: 1.05;
+}
+
+/* 90–100% (Gata): Verde Neon (#00FF88) */
+.anatomy-svg .anatomy-muscle-zone.rec-ready {
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.65));
+}
+
+.anatomy-svg .anatomy-muscle-zone.rec-ready,
+.anatomy-svg .anatomy-muscle-zone.rec-ready path {
+  fill: #00FF88;
+  fill-opacity: 0.9;
+  stroke: #80FFBF;
+  stroke-width: 1.05;
+}
+
+/* 4. Hover & Selecție Activă — păstrează prioritate clară peste culorile neon */
+.anatomy-svg .anatomy-muscle-zone.is-hovered {
+  filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+}
+
+.anatomy-svg .anatomy-muscle-zone.is-hovered path {
+  stroke: #FFFFFF;
+  stroke-width: 1.65;
+}
+
+.anatomy-svg .anatomy-muscle-zone.is-active {
+  filter: brightness(1.16) drop-shadow(0 0 9px rgba(255, 255, 255, 0.68));
+}
+
+.anatomy-svg .anatomy-muscle-zone.is-active path {
+  stroke: #FFFFFF;
+  stroke-width: 2.1;
+}
+
+/* 5. Legendă mai lizibilă pe OLED la luminozitate scăzută */
+.anatomy-legend-item {
+  color: #CBD5E1;
+  font-weight: 600;
+}
+
+.anatomy-legend-dot {
+  width: 9px;
+  height: 9px;
+}
+
+
+/* === MODIFICAREA #4: TAP MOBIL PE SVG, 5 PASTILE RAPIDE & PANOU FIX DE DETALII === */
+
+/* 1. Tap real și precis pe iOS Safari — silueta nu mai fură atingerile */
+.anatomy-svg {
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.anatomy-svg .anatomy-silhouette {
+  pointer-events: none;
+}
+
+.anatomy-svg .anatomy-muscle-zone,
+.anatomy-svg .anatomy-muscle-zone path {
+  cursor: pointer;
+  pointer-events: all;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Evidențiere neon mai aprinsă pentru grupa musculară selectată curent */
+.anatomy-svg .anatomy-muscle-zone.is-active {
+  filter: brightness(1.26) drop-shadow(0 0 11px rgba(255, 255, 255, 0.82)) !important;
+}
+
+.anatomy-svg .anatomy-muscle-zone.is-active path {
+  stroke: #FFFFFF !important;
+  stroke-width: 2.35 !important;
+}
+
+/* 2. Rând compact de 5 pastile clicabile sub siluetă (prietenos cu degetul pe iPhone) */
+.anatomy-pills-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.anatomy-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 6px 4px;
+  border-radius: 11px;
+  background: #18181C;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #CBD5E1;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.anatomy-pill-btn:active {
+  transform: scale(0.96);
+}
+
+.anatomy-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.anatomy-pill-btn.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  border-color: var(--pill-accent, #FF4D00);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--pill-accent, #FF4D00) 36%, transparent);
+}
+
+@media (max-width: 390px) {
+  .anatomy-pill-btn {
+    font-size: 10.5px;
+    gap: 3px;
+    padding: 6px 2px;
+  }
+  .anatomy-pill-dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* 3. Panou fix de detalii sub pastile (Stealth OLED + accent neon al grupei) */
+.anatomy-detail-panel {
+  margin-top: 10px;
+  padding: 14px 15px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--panel-accent, #FF4D00) 11%, transparent) 0%, transparent 62%),
+    #15151A;
+  border: 1px solid color-mix(in srgb, var(--panel-accent, #FF4D00) 34%, rgba(255, 255, 255, 0.08));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.anatomy-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.anatomy-detail-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.anatomy-detail-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #F5F5F7;
+  letter-spacing: -0.01em;
+}
+
+.anatomy-detail-mode-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.anatomy-detail-big-value {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
+}
+
+.anatomy-detail-tier-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--panel-accent, #94A3B8);
+  color: var(--panel-accent, #94A3B8);
+  background: color-mix(in srgb, var(--panel-accent, #94A3B8) 14%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--panel-accent, #94A3B8) 26%, transparent);
+}
+
+/* Bara vizuală neon de recuperare */
+.anatomy-rec-track {
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.anatomy-rec-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.anatomy-detail-meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.anatomy-detail-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: #A1A1AA;
+}
+
+.anatomy-detail-meta-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+.anatomy-detail-meta-val {
+  color: #F5F5F7;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+  /* === MODIFICAREA #7: HEATMAP INTERACTIV (CONECTARE LA DETALII ANTRENAMENT) === */
+
+.heatmap-cell-interactive {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 140ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 160ms ease, filter 160ms ease;
+}
+
+.heatmap-cell-interactive:active {
+  transform: scale(0.88);
+}
+
+/* Reacție vizuală dedicată pentru zilele portocalii (cu antrenament) */
+.heatmap-cell-active:hover {
+  transform: scale(1.18);
+  filter: brightness(1.15);
+  box-shadow: 0 0 10px rgba(255, 77, 0, 0.55);
+  z-index: 2;
+  position: relative;
+}
+
+/* Reacție discretă pentru zilele gri (odihnă) */
+.heatmap-cell-rest:hover {
+  filter: brightness(1.25);
+}
+
+/* Toast discret Stealth OLED (~2 secunde) pentru zile de odihnă sau cardio */
+#titan-consistency-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 14px);
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(17, 17, 20, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 9px 16px;
+  color: #E4E4E7;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 180ms ease, transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#titan-consistency-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+#titan-consistency-toast.is-cardio {
+  border-color: rgba(255, 77, 0, 0.38);
+}
+
+
+/* === MODIFICAREA #7 (FIX): PAGINĂ DEDICATĂ DETALII ANTRENAMENT DIN CONSISTENȚĂ === */
+
+.titan-day-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050507;
+  color: #F5F5F7;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: titanDayFadeIn 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes titanDayFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.titan-day-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(5, 5, 7, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.titan-day-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 12px;
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #F5F5F7;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 120ms ease;
+}
+
+.titan-day-back-btn:hover {
+  background: #1C1C22;
+  border-color: rgba(255, 77, 0, 0.45);
+}
+
+.titan-day-back-btn:active {
+  transform: scale(0.96);
+}
+
+.titan-day-header-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF7A40;
+  background: rgba(255, 77, 0, 0.1);
+  border: 1px solid rgba(255, 77, 0, 0.25);
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+.titan-day-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 18px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+}
+
+.titan-day-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titan-day-session-card {
+  background: #111114;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.titan-day-session-top {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.titan-day-session-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #F5F5F7;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.titan-day-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.titan-day-stat-box {
+  background: #18181C;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 13px;
+  padding: 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.titan-day-stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #8E8E93;
+}
+
+.titan-day-stat-val {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #F5F5F7;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.titan-day-ex-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.titan-day-ex-card {
+  background: #16161B;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.titan-day-ex-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.titan-day-ex-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #F5F5F7;
+  line-height: 1.25;
+}
+
+.titan-day-ex-muscle {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #FF4D00;
+  margin-bottom: 2px;
+}
+
+.titan-day-sets-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.titan-day-set-head,
+.titan-day-set-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 1fr 78px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.titan-day-set-head {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8E8E93;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.titan-day-set-row {
+  background: #1C1C22;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  font-weight: 600;
+  color: #E4E4E7;
+}
+
+.titan-day-set-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: rgba(255, 77, 0, 0.14);
+  color: #FF7A40;
+  font-size: 11.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+  /* === MODIFICAREA #8: WORKOUT-URI PROPUSE DIN ISTORIC + AUTO-DENUMIRE INTELIGENTĂ === */
+
+.smart-prop-section {
+  background: linear-gradient(145deg, rgba(255, 77, 0, 0.06) 0%, #111114 48%);
+  border: 1px solid rgba(255, 77, 0, 0.22);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+@media (min-width: 640px) {
+  .smart-prop-section {
+    padding: 20px;
+  }
+}
+
+.smart-prop-summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.smart-prop-summary::-webkit-details-marker {
+  display: none;
+}
+
+.smart-prop-summary-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.smart-prop-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 77, 0, 0.14);
+  border: 1px solid rgba(255, 77, 0, 0.3);
+  color: #FF4D00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.smart-prop-heading {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #F5F5F7;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.smart-prop-sub {
+  font-size: 11px;
+  color: #8E8E93;
+  margin-top: 1px;
+}
+
+.smart-prop-chevron {
+  color: #8E8E93;
+  transition: transform 180ms ease;
+  flex-shrink: 0;
+}
+
+.smart-prop-section[open] .smart-prop-chevron {
+  transform: rotate(180deg);
+}
+
+.smart-prop-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+@media (min-width: 640px) {
+  .smart-prop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+.smart-prop-card {
+  background: #16161B;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  transition: border-color 160ms ease, background-color 160ms ease, transform 140ms ease;
+}
+
+.smart-prop-card:hover {
+  border-color: rgba(255, 77, 0, 0.38);
+  background: #1A1A20;
+}
+
+.smart-prop-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.smart-prop-title-wrap {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.smart-prop-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #F5F5F7;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.smart-prop-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.smart-prop-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 77, 0, 0.13);
+  border: 1px solid rgba(255, 77, 0, 0.28);
+  color: #FF7A40;
+  font-weight: 700;
+}
+
+.smart-prop-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #8E8E93;
+  font-weight: 600;
+}
+
+.smart-prop-ex-list {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #A1A1AA;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.smart-prop-ex-sep {
+  color: #FF4D00;
+  margin: 0 5px;
+  font-weight: 800;
+}
+
+.smart-prop-start-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 7px 14px;
+  border-radius: 11px;
+  background: #FF4D00;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  box-shadow: 0 4px 14px rgba(255, 77, 0, 0.3);
+  transition: background-color 150ms ease, transform 120ms ease, box-shadow 150ms ease;
+}
+
+.smart-prop-start-btn:hover {
+  background: #FF621F;
+  box-shadow: 0 6px 18px rgba(255, 77, 0, 0.42);
+}
+
+.smart-prop-start-btn:active {
+  transform: scale(0.96);
+}
+
+.smart-prop-empty {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #16161B;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  color: #8E8E93;
+  line-height: 1.45;
+}
 
   </style>
 
@@ -1844,11 +3201,12 @@ img.exercise-image,
         const isSel = state.selectedHeatmapDay && state.selectedHeatmapDay.dateKey === key;
         const labelDate = cur.toLocaleDateString("ro-RO", { day: "numeric", month: "short", year: "numeric" });
         cells.push(`
-          <button type="button" onclick="selectHeatmapDay('${key}')"
-            title="${escapeHtml(labelDate)}: ${rec.count === 0 ? "Zi de pauză" : rec.count + " sesiuni"}"
-            class="heatmap-cell level-${level} ${isToday ? "today-cell" : ""} ${isSel ? "ring-2 ring-white scale-110" : ""}">
-          </button>
-        `);
+      <button type="button" onclick="openConsistencyDayDetail('${key}')"
+        title="${escapeHtml(labelDate)}: ${rec.count === 0 ? "Zi de pauză" : rec.count + " sesiuni"}"
+        aria-label="${escapeHtml(labelDate)}: ${rec.count === 0 ? "Zi de odihnă" : rec.count + " sesiuni"}"
+        class="heatmap-cell level-${level} heatmap-cell-interactive ${rec.count > 0 ? "heatmap-cell-active" : "heatmap-cell-rest"} ${isToday ? "today-cell" : ""} ${isSel ? "ring-2 ring-white scale-110" : ""}">
+      </button>
+    `);
       }
 
       const pct = Math.round((activeDays / totalDaysToShow) * 100);
@@ -2617,6 +3975,7 @@ img.exercise-image,
             </section>
 
             <!-- Șabloane 1-Click (Compacte) -->
+            ${renderSmartProposedWorkoutsHTML()}
             <details class="card-clean p-4 sm:p-5 group" ${state.activeExercises.length === 0 ? "open" : ""}>
               <summary class="list-none flex items-center justify-between cursor-pointer select-none">
                 <span class="text-[11px] font-bold uppercase tracking-widest text-[#8E8E93] inline-flex items-center gap-1.5">
@@ -2671,11 +4030,16 @@ img.exercise-image,
                             <h4 class="text-sm sm:text-base font-bold text-[#F5F5F7] leading-snug truncate">${escapeHtml(ex.name)}</h4>
                           </div>
                         </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                        ${renderWorkoutSwapButtonHTML(item.id, ex.id)}
                         <button type="button" onclick="removeWorkoutExercise('${item.id}')"
                           class="w-9 h-9 rounded-xl bg-[#18181C] border border-white/[0.06] flex items-center justify-center text-[#8E8E93] hover:text-red-400 cursor-pointer shrink-0">
                           <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
+                        </div>
                       </div>
+
+                      ${renderWorkoutExercisePRBarHTML(ex.id || ex.name, item.sets)}
 
                       <!-- Tabel Minimalist: SET | KG | REPS | ✓ -->
                       <div class="space-y-2">
@@ -2965,6 +4329,7 @@ img.exercise-image,
                         </div>
                         <h3 onclick="openExerciseDetail('${ex.id}')" class="text-xs sm:text-sm font-bold text-[#F5F5F7] leading-snug line-clamp-2 cursor-pointer">${escapeHtml(ex.name)}</h3>
                         <p class="text-[11px] text-[#8E8E93] truncate">${escapeHtml(ex.subGroup || ex.primaryMuscle)}</p>
+                        ${renderExerciseCardBestSetBadgeHTML(ex.id || ex.name)}
                       </div>
                     </div>
                     <div class="p-3.5 sm:p-4 pt-0 flex gap-2">
@@ -3308,6 +4673,9 @@ img.exercise-image,
                       ${ex.tips.map((t) => `<li>• ${escapeHtml(t)}</li>`).join("")}
                     </ul>
                   </div>` : ""}
+                  ${renderExerciseSubMuscleBadgeHTML(ex)}
+                  ${renderExerciseBestSetModalHTML(ex.id || ex.name)}
+                  ${renderExerciseDetailAlternativesHTML(ex)}
                 <button type="button" onclick="addExerciseToWorkout('${ex.id}', true)" class="btn-primary w-full">
                   <i data-lucide="plus" class="w-4 h-4"></i>
                   Adaugă în Workout Tracker
@@ -4060,18 +5428,118 @@ function getAnatomyLevelStyle(levelName, oneRM) {
     .replace(/[\u0300-\u036f]/g, "");
 
   if (!oneRM || oneRM <= 0 || n.includes("neinitiat") || n.includes("fara")) {
-    return { fill: "#222228", opacity: "1", cls: "level-neinitiat", badgeColor: "#8E8E93", label: "Neinițiat" };
+    return {
+      fill: "#2A3347",
+      opacity: "0.94",
+      cls: "level-neinitiat",
+      badgeColor: "#94A3B8",
+      label: "Neinițiat"
+    };
   }
   if (n.includes("elita") || n.includes("elite")) {
-    return { fill: "#F59E0B", opacity: "1", cls: "level-elita", badgeColor: "#F59E0B", label: "Elită" };
+    return {
+      fill: "#FF6B00",
+      opacity: "0.96",
+      cls: "level-elita",
+      badgeColor: "#FFD600",
+      label: "Elită"
+    };
   }
   if (n.includes("avansat") || n.includes("advanced")) {
-    return { fill: "#FF4D00", opacity: "0.95", cls: "level-avansat", badgeColor: "#FF4D00", label: "Avansat" };
+    return {
+      fill: "#C04BFF",
+      opacity: "0.92",
+      cls: "level-avansat",
+      badgeColor: "#C04BFF",
+      label: "Avansat"
+    };
   }
   if (n.includes("intermediar") || n.includes("intermediate")) {
-    return { fill: "#22C55E", opacity: "0.9", cls: "level-intermediar", badgeColor: "#22C55E", label: "Intermediar" };
+    return {
+      fill: "#00E5FF",
+      opacity: "0.92",
+      cls: "level-intermediar",
+      badgeColor: "#00E5FF",
+      label: "Intermediar"
+    };
   }
-  return { fill: "#3B82F6", opacity: "0.75", cls: "level-incepator", badgeColor: "#3B82F6", label: "Începător" };
+  return {
+    fill: "#00FF88",
+    opacity: "0.9",
+    cls: "level-incepator",
+    badgeColor: "#00FF88",
+    label: "Începător"
+  };
+}
+
+function getAnatomyRecoveryColor(recoveryVal) {
+  const val = recoveryVal !== undefined && recoveryVal !== null ? Number(recoveryVal) : 100;
+  if (val < 50) return "#FF2E55";
+  if (val < 90) return "#FFD600";
+  return "#00FF88";
+}
+
+function syncDashboardNeonBadges() {
+  const NEON_BADGE_MAP = {
+    neinitiat: {
+      text: "#94A3B8",
+      bg: "rgba(42, 51, 71, 0.72)",
+      border: "rgba(100, 116, 139, 0.65)",
+      glow: "none"
+    },
+    incepator: {
+      text: "#00FF88",
+      bg: "rgba(0, 255, 136, 0.12)",
+      border: "rgba(0, 255, 136, 0.42)",
+      glow: "0 0 8px rgba(0, 255, 136, 0.22)"
+    },
+    intermediar: {
+      text: "#00E5FF",
+      bg: "rgba(0, 229, 255, 0.12)",
+      border: "rgba(0, 229, 255, 0.42)",
+      glow: "0 0 8px rgba(0, 229, 255, 0.22)"
+    },
+    avansat: {
+      text: "#C04BFF",
+      bg: "rgba(192, 75, 255, 0.14)",
+      border: "rgba(192, 75, 255, 0.46)",
+      glow: "0 0 8px rgba(192, 75, 255, 0.25)"
+    },
+    elita: {
+      text: "#FFD600",
+      bg: "rgba(255, 107, 0, 0.18)",
+      border: "rgba(255, 214, 0, 0.52)",
+      glow: "0 0 9px rgba(255, 107, 0, 0.32)"
+    }
+  };
+
+  document.querySelectorAll("span, strong").forEach((el) => {
+    if (el.children.length > 0) return;
+    if (el.closest(".anatomy-legend, .anatomy-toggle, .anatomy-mode-toggle, nav, header")) return;
+
+    const norm = String(el.textContent || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    const theme = NEON_BADGE_MAP[norm];
+    if (!theme) return;
+
+    const cls = typeof el.className === "string" ? el.className : "";
+    const isBadgePill = /\b(rounded|px-|py-|bg-|border)\b/.test(cls);
+
+    el.style.color = theme.text;
+    if (isBadgePill) {
+      el.style.backgroundColor = theme.bg;
+      el.style.borderColor = theme.border;
+      el.style.borderWidth = "1px";
+      el.style.borderStyle = "solid";
+      el.style.boxShadow = theme.glow;
+    } else if (norm !== "neinitiat") {
+      el.style.textShadow = `0 0 10px ${theme.border}`;
+    }
+  });
 }
 
 function ensureAnatomyTooltip() {
@@ -4126,7 +5594,7 @@ window.handleAnatomyHover = function (event, muscleName) {
       </div>
       <div>
         <div style="font-size:10px;color:#8E8E93;text-transform:uppercase;letter-spacing:0.06em;">Recuperare</div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:#22C55E;font-variant-numeric:tabular-nums;">${info.recovery}%</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:${getAnatomyRecoveryColor(info.recovery)};font-variant-numeric:tabular-nums;">${info.recovery}%</div>
       </div>
     </div>
   `;
@@ -4189,20 +5657,13 @@ function renderAnatomyScanner() {
   const mode = window.titanAnatomyMode || "strength";
   const isRecovery = mode === "recovery";
 
-  const activeMuscle =
-    (typeof state !== "undefined" &&
-      (state.selectedPredictiveMuscle ||
-        state.predictiveMuscle ||
-        state.selectedMuscle ||
-        state.selectedMuscleGroup ||
-        state.activeMuscle)) ||
-    "Piept";
+  const activeMuscle = getActiveAnatomyMuscle(dataMap);
+if (typeof exportTitanPublicStats === "function") exportTitanPublicStats(false);
 
   const getRecoveryClass = (recoveryVal) => {
     const val = recoveryVal !== undefined && recoveryVal !== null ? Number(recoveryVal) : 100;
-    if (val < 40) return "rec-low";
-    if (val < 70) return "rec-mid";
-    if (val < 90) return "rec-high";
+    if (val < 50) return "rec-low";
+    if (val < 90) return "rec-mid";
     return "rec-ready";
   };
 
@@ -4219,7 +5680,7 @@ function renderAnatomyScanner() {
       const st =
         typeof getAnatomyLevelStyle === "function"
           ? getAnatomyLevelStyle(info.level, info.oneRM)
-          : { fill: "#222228", opacity: "1", cls: "level-neinitiat" };
+          : { fill: "#2A3347", opacity: "0.94", cls: "level-neinitiat" };
       modeClass = st.cls;
       fillAttrs = `fill="${st.fill}" fill-opacity="${st.opacity}"`;
     }
@@ -4231,7 +5692,7 @@ function renderAnatomyScanner() {
       onmouseenter="handleAnatomyHover(event, '${muscleName}')"
       onmousemove="handleAnatomyMove(event)"
       onmouseleave="handleAnatomyLeave()"
-      onclick="if (typeof handleAnatomyLeave === 'function') handleAnatomyLeave(); selectPredictiveMuscle('${muscleName}')"
+      onclick="selectAnatomyMuscleTap('${muscleName}')"
     `;
   };
 
@@ -4294,18 +5755,22 @@ function renderAnatomyScanner() {
 
   const legendHTML = isRecovery
     ? `
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#EF4444;box-shadow:0 0 6px rgba(239,68,68,0.6);"></span>0–39% Odihnă</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#FF4D00;"></span>40–69% Refacere</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#F59E0B;"></span>70–89% Aproape gata</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#22C55E;opacity:0.78;"></span>90–100% Gata</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#FF2E55;box-shadow:0 0 7px rgba(255,46,85,0.8);"></span>&lt; 50% Odihnă</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#FFD600;box-shadow:0 0 7px rgba(255,214,0,0.8);"></span>50–89% Refacere</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#00FF88;box-shadow:0 0 7px rgba(0,255,136,0.8);"></span>90–100% Gata</span>
       `
     : `
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#222228;border:1px solid rgba(255,255,255,0.18);"></span>Neinițiat</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#3B82F6;opacity:0.75;"></span>Începător</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#22C55E;"></span>Intermediar</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#FF4D00;box-shadow:0 0 6px rgba(255,77,0,0.6);"></span>Avansat</span>
-        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#F59E0B;box-shadow:0 0 6px rgba(245,158,11,0.6);"></span>Elită</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#2A3347;border:1.5px solid #64748B;"></span>Neinițiat</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#00FF88;box-shadow:0 0 7px rgba(0,255,136,0.8);"></span>Începător</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#00E5FF;box-shadow:0 0 7px rgba(0,229,255,0.8);"></span>Intermediar</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#C04BFF;box-shadow:0 0 7px rgba(192,75,255,0.8);"></span>Avansat</span>
+        <span class="anatomy-legend-item"><span class="anatomy-legend-dot" style="background:#FF6B00;border:1px solid #FFD600;box-shadow:0 0 8px rgba(255,214,0,0.85);"></span>Elită</span>
       `;
+
+  // Sincronizează badge-urile de nivel de pe Dashboard imediat după inserarea HTML-ului în DOM
+  if (typeof requestAnimationFrame === "function" && typeof syncDashboardNeonBadges === "function") {
+    requestAnimationFrame(() => syncDashboardNeonBadges());
+  }
 
   return `
     <div class="anatomy-card">
@@ -4412,7 +5877,7 @@ function renderAnatomyScanner() {
           <span class="anatomy-view-label">Spate</span>
         </div>
       </div>
-
+      ${renderAnatomyQuickPillsAndDetailHTML(dataMap, activeMuscle, isRecovery)}
       <div class="anatomy-legend">
         ${legendHTML}
       </div>
@@ -4544,6 +6009,2454 @@ function renderAnatomyScanner() {
 
   window.addEventListener("blur", resetActiveCard);
   window.addEventListener("scroll", resetActiveCard, { passive: true, capture: true });
+})();
+
+  /* === MODIFICAREA #1: MOTOR BEST SET (RECORD PERSONAL) & PROGRESSIVE OVERLOAD === */
+
+function normalizeBestSetKey(str) {
+  return String(str || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function formatBestSetWeight(val) {
+  const num = Math.round((Number(val) || 0) * 100) / 100;
+  return Number.isInteger(num) ? String(num) : String(num);
+}
+
+function formatBestSetDate(rawDate) {
+  if (!rawDate) return "";
+  const d = new Date(rawDate);
+  if (Number.isNaN(d.getTime())) return String(rawDate);
+  try {
+    return d.toLocaleDateString("ro-RO", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    });
+  } catch (e) {
+    return String(rawDate).slice(0, 10);
+  }
+}
+
+function parseBestSetTimestamp(rawDate) {
+  if (!rawDate) return 0;
+  if (typeof rawDate === "number") return rawDate;
+  const t = Date.parse(rawDate);
+  return Number.isNaN(t) ? 0 : t;
+}
+
+function computeBestSetRaw1RM(weight, reps) {
+  if (weight <= 0 || reps <= 0) return 0;
+  return reps === 1 ? weight : weight * (1 + reps / 30);
+}
+
+// Compară 2 serii pentru alegerea Best Set-ului din istoric (cu data ca ultim criteriu)
+function isBetterHistoricalSet(candidate, current) {
+  if (!current) return true;
+  const EPS = 1e-6;
+
+  // 1. Scor 1RM Epley mai mare
+  if (candidate.raw1RM > current.raw1RM + EPS) return true;
+  if (candidate.raw1RM + EPS < current.raw1RM) return false;
+
+  // 2. Egalitate de scor: pentru greutatea corpului (0 kg) câștigă repetările mai multe
+  if (candidate.weight === 0 && current.weight === 0) {
+    if (candidate.reps !== current.reps) return candidate.reps > current.reps;
+    return candidate.timestamp > current.timestamp;
+  }
+
+  // 3. Egalitate de scor la greutăți: câștigă greutatea mai mare
+  if (Math.abs(candidate.weight - current.weight) > EPS) {
+    return candidate.weight > current.weight;
+  }
+
+  // 4. Ultimul criteriu: data cea mai recentă
+  return candidate.timestamp > current.timestamp;
+}
+
+// Verifică strict dacă o serie din antrenamentul activ DEPĂȘEȘTE vechiul record
+function doesSetBeatRecord(candidate, oldRecord) {
+  if (!candidate) return false;
+  if (!oldRecord) return true; // Primul record stabilit vreodată
+  const EPS = 1e-6;
+
+  if (candidate.raw1RM > oldRecord.raw1RM + EPS) return true;
+  if (candidate.raw1RM + EPS < oldRecord.raw1RM) return false;
+
+  if (candidate.weight === 0 && oldRecord.weight === 0) {
+    return candidate.reps > oldRecord.reps;
+  }
+  return candidate.weight > oldRecord.weight + EPS;
+}
+
+function resolveExerciseIdentifiers(exerciseNameOrId) {
+  const targetNorm = normalizeBestSetKey(exerciseNameOrId);
+  const validKeys = new Set();
+  if (targetNorm) validKeys.add(targetNorm);
+
+  const catalog =
+    (typeof state !== "undefined" && Array.isArray(state.exercises) && state.exercises.length
+      ? state.exercises
+      : typeof INITIAL_EXERCISES !== "undefined" && Array.isArray(INITIAL_EXERCISES)
+        ? INITIAL_EXERCISES
+        : []);
+
+  const found = catalog.find(
+    (ex) =>
+      normalizeBestSetKey(ex.id) === targetNorm ||
+      normalizeBestSetKey(ex.name) === targetNorm
+  );
+
+  if (found) {
+    if (found.id) validKeys.add(normalizeBestSetKey(found.id));
+    if (found.name) validKeys.add(normalizeBestSetKey(found.name));
+  }
+  return validKeys;
+}
+
+function getExerciseBestSet(exerciseNameOrId) {
+  if (!exerciseNameOrId) return null;
+
+  const workouts =
+    (typeof state !== "undefined" &&
+      (Array.isArray(state.workouts)
+        ? state.workouts
+        : Array.isArray(state.history)
+          ? state.history
+          : [])) ||
+    [];
+
+  if (!workouts.length) return null;
+
+  const validKeys = resolveExerciseIdentifiers(exerciseNameOrId);
+  let best = null;
+
+  workouts.forEach((workout) => {
+    if (!workout) return;
+    const rawDate = workout.date || workout.createdAt || workout.timestamp || "";
+    const timestamp = parseBestSetTimestamp(rawDate);
+    const exercisesList = Array.isArray(workout.exercises) ? workout.exercises : [];
+
+    exercisesList.forEach((ex) => {
+      if (!ex) return;
+      const exIdKey = normalizeBestSetKey(ex.exerciseId || ex.id);
+      const exNameKey = normalizeBestSetKey(ex.name || ex.title);
+
+      if (!validKeys.has(exIdKey) && !validKeys.has(exNameKey)) return;
+
+      const sets = Array.isArray(ex.sets) ? ex.sets : [];
+      sets.forEach((set) => {
+        if (!set) return;
+        // Ignoră seriile marcate explicit ca necompletate
+        if (set.completed === false || set.done === false || set.checked === false) return;
+
+        const reps = parseInt(set.reps, 10);
+        if (!Number.isFinite(reps) || reps <= 0) return;
+
+        const parsedWeight = parseFloat(set.weight ?? set.kg ?? 0);
+        const weight = Number.isFinite(parsedWeight) && parsedWeight > 0 ? parsedWeight : 0;
+        const raw1RM = computeBestSetRaw1RM(weight, reps);
+
+        const candidate = {
+          weight,
+          reps,
+          raw1RM,
+          estimated1RM: Math.round(raw1RM * 10) / 10,
+          date: rawDate,
+          timestamp
+        };
+
+        if (isBetterHistoricalSet(candidate, best)) {
+          best = candidate;
+        }
+      });
+    });
+  });
+
+  if (!best) return null;
+
+  return {
+    weight: best.weight,
+    reps: best.reps,
+    estimated1RM: best.estimated1RM,
+    raw1RM: best.raw1RM,
+    date: best.date
+  };
+}
+
+function getBestCompletedSetFromList(sets) {
+  if (!Array.isArray(sets) || !sets.length) return null;
+  let best = null;
+
+  sets.forEach((set) => {
+    if (!set) return;
+    const isCompleted = set.completed === true || set.done === true || set.checked === true;
+    if (!isCompleted) return;
+
+    const reps = parseInt(set.reps, 10);
+    if (!Number.isFinite(reps) || reps <= 0) return;
+
+    const parsedWeight = parseFloat(set.weight ?? set.kg ?? 0);
+    const weight = Number.isFinite(parsedWeight) && parsedWeight > 0 ? parsedWeight : 0;
+    const raw1RM = computeBestSetRaw1RM(weight, reps);
+
+    const candidate = {
+      weight,
+      reps,
+      raw1RM,
+      estimated1RM: Math.round(raw1RM * 10) / 10,
+      timestamp: Date.now()
+    };
+
+    if (isBetterHistoricalSet(candidate, best)) {
+      best = candidate;
+    }
+  });
+
+  return best;
+}
+
+function formatBestSetDisplayText(best) {
+  if (!best) return "";
+  if (best.weight > 0) {
+    return `${formatBestSetWeight(best.weight)} kg × ${best.reps} rep`;
+  }
+  return `Greutatea corpului × ${best.reps} rep`;
+}
+
+// 1. HTML pentru modalul de detalii al exercițiului (tab-ul Exerciții)
+function renderExerciseBestSetModalHTML(exerciseNameOrId) {
+  const best = getExerciseBestSet(exerciseNameOrId);
+
+  if (!best) {
+    return `
+      <div class="best-set-modal-box is-empty">
+        <div class="best-set-modal-header" style="margin-bottom:0;">
+          <span class="best-set-modal-title">
+            <i data-lucide="trophy" style="width:14px;height:14px;stroke-width:1.9;"></i>
+            Best Set (Record Personal)
+          </span>
+          <span style="font-size:12px;color:#8E8E93;">Niciun record salvat încă</span>
+        </div>
+      </div>
+    `;
+  }
+
+  const dateLabel = formatBestSetDate(best.date);
+  const oneRMPill =
+    best.weight > 0
+      ? `<span class="best-set-1rm-pill">1RM est. <strong style="color:#FF4D00;">${best.estimated1RM.toFixed(1)} kg</strong></span>`
+      : `<span class="best-set-1rm-pill">Bodyweight PR</span>`;
+
+  return `
+    <div class="best-set-modal-box">
+      <div class="best-set-modal-header">
+        <span class="best-set-modal-title">
+          <i data-lucide="trophy" style="width:14px;height:14px;stroke-width:1.9;"></i>
+          Best Set (Record Personal)
+        </span>
+        ${dateLabel ? `<span class="best-set-modal-date">${dateLabel}</span>` : ""}
+      </div>
+      <div class="best-set-modal-metrics">
+        <span class="best-set-main-val">${formatBestSetDisplayText(best)}</span>
+        ${oneRMPill}
+      </div>
+    </div>
+  `;
+}
+
+// 2. HTML pentru badge-ul discret de pe cardurile din Biblioteca Exerciții
+function renderExerciseCardBestSetBadgeHTML(exerciseNameOrId) {
+  const best = getExerciseBestSet(exerciseNameOrId);
+  if (!best) return "";
+
+  const shortText =
+    best.weight > 0
+      ? `${formatBestSetWeight(best.weight)} kg × ${best.reps}`
+      : `BW × ${best.reps} rep`;
+
+  return `
+    <div class="best-set-card-badge" title="Record Personal (Best Set)">
+      <i data-lucide="trophy" style="width:11px;height:11px;stroke-width:2;flex-shrink:0;"></i>
+      <span>${shortText}</span>
+    </div>
+  `;
+}
+
+// 3. HTML pentru bara compactă de sub titlul exercițiului din Workout Activ
+function renderWorkoutExercisePRBarHTML(exerciseNameOrId, activeSets) {
+  const historyBest = getExerciseBestSet(exerciseNameOrId);
+  const liveBest = getBestCompletedSetFromList(activeSets);
+  const isNewPR = Boolean(liveBest && doesSetBeatRecord(liveBest, historyBest));
+
+  if (!historyBest && !liveBest) {
+    return `
+      <div class="workout-pr-bar">
+        <div class="workout-pr-top">
+          <span class="workout-pr-record" style="color:#8E8E93;font-weight:600;">
+            <i data-lucide="trophy" style="width:13px;height:13px;color:#8E8E93;stroke-width:1.9;"></i>
+            Niciun record salvat încă
+          </span>
+        </div>
+        <div class="workout-pr-target">
+          <i data-lucide="target" style="width:12px;height:12px;color:#FF4D00;stroke-width:1.9;flex-shrink:0;"></i>
+          <span>Bifează prima serie completă pentru a seta reperul tău inițial.</span>
+        </div>
+      </div>
+    `;
+  }
+
+  const displayBest = isNewPR ? liveBest : historyBest;
+  const targetBasis = historyBest || liveBest;
+
+  let targetText = "";
+  if (targetBasis.weight > 0) {
+    const sameW = formatBestSetWeight(targetBasis.weight);
+    const nextW = formatBestSetWeight(targetBasis.weight + 2.5);
+    targetText = `<strong>${sameW} kg × ${targetBasis.reps + 1} rep</strong> sau <strong>${nextW} kg × ${targetBasis.reps} rep</strong>`;
+  } else {
+    targetText = `<strong>${targetBasis.reps + 1} rep</strong> (greutatea corpului)`;
+  }
+
+  const badgeHTML = isNewPR
+    ? `<span class="pr-new-badge"><i data-lucide="flame" style="width:11px;height:11px;stroke-width:2.2;"></i>RECORD NOU</span>`
+    : "";
+
+  const subLineHTML = isNewPR && historyBest
+    ? `<div class="workout-pr-target">
+         <i data-lucide="trending-up" style="width:12px;height:12px;color:#22C55E;stroke-width:2;flex-shrink:0;"></i>
+         <span>Ai depășit vechiul record (${formatBestSetDisplayText(historyBest)})</span>
+       </div>`
+    : `<div class="workout-pr-target">
+         <i data-lucide="target" style="width:12px;height:12px;color:#FF4D00;stroke-width:1.9;flex-shrink:0;"></i>
+         <span>Țintă PR: ${targetText}</span>
+       </div>`;
+
+  return `
+    <div class="workout-pr-bar ${isNewPR ? "has-new-pr" : ""}">
+      <div class="workout-pr-top">
+        <span class="workout-pr-record">
+          <i data-lucide="trophy" style="width:13px;height:13px;color:${isNewPR ? "#FF4D00" : "#F59E0B"};stroke-width:2;"></i>
+          ${isNewPR ? "Best Set azi:" : "Record:"} ${formatBestSetDisplayText(displayBest)}
+        </span>
+        ${badgeHTML}
+      </div>
+      ${subLineHTML}
+    </div>
+  `;
+}
+
+  /* === MODIFICAREA #2: SUB-GRUPE ANATOMICE, ALTERNATIVE & ÎNLOCUIRE RAPIDĂ LA SALĂ === */
+
+function normalizeAltText(str) {
+  return String(str || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function escapeSingleQuoteJs(str) {
+  return String(str || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+function getAllExercisesCatalog() {
+  if (typeof state !== "undefined" && Array.isArray(state.exercises) && state.exercises.length) {
+    return state.exercises;
+  }
+  if (typeof INITIAL_EXERCISES !== "undefined" && Array.isArray(INITIAL_EXERCISES)) {
+    return INITIAL_EXERCISES;
+  }
+  return [];
+}
+
+function resolveExerciseObject(exerciseOrId) {
+  if (!exerciseOrId) return null;
+  if (typeof exerciseOrId === "object") return exerciseOrId;
+  const key = normalizeAltText(exerciseOrId);
+  return (
+    getAllExercisesCatalog().find(
+      (ex) => normalizeAltText(ex.id) === key || normalizeAltText(ex.name) === key
+    ) || null
+  );
+}
+
+function getExerciseSubMuscle(exerciseOrId) {
+  const ex = resolveExerciseObject(exerciseOrId);
+  if (!ex) return "General";
+
+  const group = normalizeAltText(ex.primaryMuscle || "");
+  const text = normalizeAltText(`${ex.id || ""} ${ex.name || ""} ${ex.subGroup || ""}`);
+  const has = (...terms) => terms.some((t) => text.includes(t));
+
+  // 1. PIEPT
+  if (group.includes("piept") || group.includes("chest")) {
+    if (has("inclinat", "incline", "superior", "upper", "de jos in sus", "low to high", "low-to-high")) {
+      return "Piept Superior";
+    }
+    if (has("declinat", "decline", "inferior", "lower", "paralele", "dips", "de sus in jos", "high to low", "high-to-low")) {
+      return "Piept Inferior";
+    }
+    return "Piept Median";
+  }
+
+  // 2. SPATE
+  if (group.includes("spate") || group.includes("back")) {
+    if (has("trapez", "shrug", "ridicari de umeri", "ridicari umeri", "farmer")) {
+      return "Trapez";
+    }
+    if (has("lombar", "lower back", "hiperextens", "hyperextens", "extensii spate", "back extension", "deadlift", "indreptari", "good morning")) {
+      return "Lombari";
+    }
+    if (has("tractiun", "pulldown", "helcometru", "pull-up", "pullup", "chin-up", "chinup", "pullover", "dorsal", "lat ", "lats", "straight arm", "brate intinse")) {
+      return "Marele Dorsal (Lats)";
+    }
+    if (has("ramat", "row", "romboizi", "spate superior", "upper back", "t-bar", "tbar", "pendlay", "seal", "aplecat", "sezut", "cablu")) {
+      return "Spate Superior & Romboizi";
+    }
+    return "Marele Dorsal (Lats)";
+  }
+
+  // 3. PICIOARE
+  if (group.includes("picioare") || group.includes("legs")) {
+    if (has("aductor", "adductor", "coapse interior", "interior coaps")) {
+      return "Aductori";
+    }
+    if (has("gamb", "calf", "calves", "varfuri", "soleus")) {
+      return "Gambe";
+    }
+    if (has("fesier", "glute", "hip thrust", "podul", "kickback", "abductor", "abductori")) {
+      return "Fesieri";
+    }
+    if (has("femural", "hamstring", "ischiogamb", "leg curl", "flexii picioare", "flexii femural", "romanes", "romanian", "rdl", "stiff", "picioare drepte", "nordic")) {
+      return "Ischiogambieri (Biceps Femural)";
+    }
+    return "Cvadriceps";
+  }
+
+  // 4. UMERI
+  if (group.includes("umeri") || group.includes("shoulder")) {
+    if (has("posterior", "rear", "face pull", "facepull", "invers", "reverse", "aplecat", "bent over", "spate umeri")) {
+      return "Deltoid Posterior";
+    }
+    if (has("lateral", "side raise", "laterale", "ramat vertical", "upright")) {
+      return "Deltoid Lateral";
+    }
+    return "Deltoid Anterior";
+  }
+
+  // 5. BRAȚE
+  if (group.includes("brate") || group.includes("arm")) {
+    if (has("antebrat", "forearm", "wrist", "incheietur", "reverse curl", "priza inversa")) {
+      return "Antebraț";
+    }
+    if (has("triceps", "extensii", "pushdown", "skull", "frances", "french", "kickback", "paralele", "dips", "priza ingusta", "close grip", "overhead", "funie", "coarda")) {
+      return "Triceps";
+    }
+    return "Biceps";
+  }
+
+  // 6. ABDOMEN / CORE
+  if (group.includes("abdomen") || group.includes("core") || group.includes("abs") || has("abdomen", "crunch", "plank", "plansa", "ab wheel", "ridicari de picioare", "leg raise", "russian twist", "woodchop")) {
+    return "Abdomen / Core";
+  }
+
+  // Fallback general pentru exerciții custom fără grupă standard
+  if (has("inclinat", "piept superior")) return "Piept Superior";
+  if (has("piept", "bench", "peck deck", "flotari")) return "Piept Median";
+  if (has("tractiun", "pulldown", "helcometru", "pullover")) return "Marele Dorsal (Lats)";
+  if (has("ramat", "row")) return "Spate Superior & Romboizi";
+  if (has("genuflex", "squat", "leg press", "leg extension")) return "Cvadriceps";
+  if (has("rdl", "leg curl", "femural")) return "Ischiogambieri (Biceps Femural)";
+  if (has("biceps", "curl")) return "Biceps";
+  if (has("triceps", "pushdown", "skull")) return "Triceps";
+
+  return ex.subGroup || ex.primaryMuscle || "General";
+}
+
+function getExerciseAlternatives(exerciseOrId) {
+  const current = resolveExerciseObject(exerciseOrId);
+  if (!current) {
+    return { subMuscle: "General", isFallbackGroup: false, alternatives: [] };
+  }
+
+  const catalog = getAllExercisesCatalog();
+  const subMuscle = getExerciseSubMuscle(current);
+  const currentIdNorm = normalizeAltText(current.id);
+  const currentGroupNorm = normalizeAltText(current.primaryMuscle);
+
+  const exactMatches = catalog.filter(
+    (other) =>
+      normalizeAltText(other.id) !== currentIdNorm &&
+      getExerciseSubMuscle(other) === subMuscle
+  );
+
+  if (exactMatches.length > 0) {
+    return {
+      subMuscle,
+      isFallbackGroup: false,
+      alternatives: exactMatches
+    };
+  }
+
+  // Fallback discret pe aceeași grupă mare dacă exercițiul este singurul din sub-grupa lui
+  const groupMatches = catalog.filter(
+    (other) =>
+      normalizeAltText(other.id) !== currentIdNorm &&
+      normalizeAltText(other.primaryMuscle) === currentGroupNorm
+  );
+
+  return {
+    subMuscle,
+    isFallbackGroup: true,
+    alternatives: groupMatches
+  };
+}
+
+function formatAltShortPR(exercise) {
+  if (typeof getExerciseBestSet !== "function") return "";
+  const best = getExerciseBestSet(exercise.id || exercise.name);
+  if (!best) return "";
+  const wText = typeof formatBestSetWeight === "function" ? formatBestSetWeight(best.weight) : String(best.weight);
+  return best.weight > 0 ? `${wText} kg × ${best.reps}` : `BW × ${best.reps} rep`;
+}
+
+// 1. Badge discret cu sub-grupa anatomică pentru modalul „Detalii Exercițiu”
+function renderExerciseSubMuscleBadgeHTML(exerciseOrId) {
+  const ex = resolveExerciseObject(exerciseOrId);
+  if (!ex) return "";
+  const subMuscle = getExerciseSubMuscle(ex);
+  const safeSub = typeof escapeHtml === "function" ? escapeHtml(subMuscle) : subMuscle;
+
+  return `
+    <div class="submuscle-badge" title="Sub-grupă anatomică vizată">
+      <i data-lucide="target" style="width:13px;height:13px;color:#FF4D00;stroke-width:2;flex-shrink:0;"></i>
+      <span>${safeSub}</span>
+    </div>
+  `;
+}
+
+// 2. Secțiunea „Alternative pentru [subMuscle]” pentru modalul „Detalii Exercițiu”
+function renderExerciseDetailAlternativesHTML(exerciseOrId) {
+  const ex = resolveExerciseObject(exerciseOrId);
+  if (!ex) return "";
+
+  const { subMuscle, isFallbackGroup, alternatives } = getExerciseAlternatives(ex);
+  const esc = typeof escapeHtml === "function" ? escapeHtml : (s) => String(s || "");
+  const headerLabel = isFallbackGroup
+    ? `Alternative pentru ${esc(ex.primaryMuscle || subMuscle)} <span style="color:#8E8E93;font-weight:500;">(aceeași grupă)</span>`
+    : `Alternative pentru <span style="color:#FF4D00;">${esc(subMuscle)}</span>`;
+
+  if (!alternatives.length) {
+    return `
+      <div class="alt-detail-section">
+        <div class="alt-detail-header" style="margin-bottom:0;">
+          <span class="alt-detail-title">
+            <i data-lucide="arrow-left-right" style="width:13px;height:13px;color:#8E8E93;stroke-width:1.9;"></i>
+            ${headerLabel}
+          </span>
+          <span class="alt-detail-count">0 variante</span>
+        </div>
+      </div>
+    `;
+  }
+
+  const itemsHTML = alternatives
+    .map((alt) => {
+      const prShort = formatAltShortPR(alt);
+      const altSub = isFallbackGroup ? getExerciseSubMuscle(alt) : (alt.equipment || "");
+      const safeAltId = escapeSingleQuoteJs(alt.id);
+
+      return `
+        <button type="button" class="alt-detail-item" onclick="openExerciseDetail('${safeAltId}')">
+          <div class="alt-detail-item-info">
+            <span class="alt-detail-item-name">${esc(alt.name)}</span>
+            <div class="alt-detail-item-meta">
+              ${altSub ? `<span>${esc(altSub)}</span>` : ""}
+              ${prShort ? `<span class="alt-pr-chip"><i data-lucide="trophy" style="width:11px;height:11px;stroke-width:2;"></i>${esc(prShort)}</span>` : ""}
+            </div>
+          </div>
+          <i data-lucide="chevron-right" style="width:15px;height:15px;color:#8E8E93;flex-shrink:0;"></i>
+        </button>
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="alt-detail-section">
+      <div class="alt-detail-header">
+        <span class="alt-detail-title">
+          <i data-lucide="arrow-left-right" style="width:13px;height:13px;color:#FF4D00;stroke-width:1.9;"></i>
+          <span>${headerLabel}</span>
+        </span>
+        <span class="alt-detail-count">${alternatives.length} ${alternatives.length === 1 ? "variantă" : "variante"}</span>
+      </div>
+      <div class="alt-detail-list">
+        ${itemsHTML}
+      </div>
+    </div>
+  `;
+}
+
+// 3. Buton compact „Alternative” pe fiecare card de exercițiu din Workout Activ
+function renderWorkoutSwapButtonHTML(activeItemId, exerciseId) {
+  const safeItemId = escapeSingleQuoteJs(activeItemId);
+  const safeExId = escapeSingleQuoteJs(exerciseId);
+
+  return `
+    <button
+      type="button"
+      class="workout-swap-btn"
+      onclick="openSwapExerciseModal('${safeItemId}', '${safeExId}')"
+      title="Schimbă exercițiul cu o alternativă pentru aceeași parte a mușchiului"
+    >
+      <i data-lucide="arrow-left-right" style="width:14px;height:14px;color:#FF4D00;stroke-width:2;flex-shrink:0;"></i>
+      <span class="swap-btn-label">Alternative</span>
+    </button>
+  `;
+}
+
+// 4. Deschidere / Închidere modal independent pentru înlocuire rapidă la sală
+window.closeSwapExerciseModal = function () {
+  const existing = document.getElementById("titan-swap-modal-root");
+  if (existing) existing.remove();
+};
+
+window.openSwapExerciseModal = function (activeItemId, currentExerciseId) {
+  window.closeSwapExerciseModal();
+
+  const currentEx = resolveExerciseObject(currentExerciseId);
+  if (!currentEx) return;
+
+  const { subMuscle, isFallbackGroup, alternatives } = getExerciseAlternatives(currentEx);
+  const esc = typeof escapeHtml === "function" ? escapeHtml : (s) => String(s || "");
+  const fallbackImg = typeof FALLBACK_IMAGE !== "undefined" ? FALLBACK_IMAGE : "";
+
+  const activeIds = new Set(
+    (typeof state !== "undefined" && Array.isArray(state.activeExercises)
+      ? state.activeExercises.map((it) => it.exerciseId)
+      : [])
+  );
+
+  const safeItemId = escapeSingleQuoteJs(activeItemId);
+  const subtitleHTML = isFallbackGroup
+    ? `Alte exerciții pentru <strong style="color:#F5F5F7;">${esc(currentEx.primaryMuscle || subMuscle)}</strong> (aceeași grupă)`
+    : `Alternative exacte pentru <strong style="color:#FF4D00;">${esc(subMuscle)}</strong>`;
+
+  const rowsHTML = alternatives.length
+    ? alternatives
+        .map((alt) => {
+          const prShort = formatAltShortPR(alt);
+          const alreadyInWorkout = activeIds.has(alt.id);
+          const safeAltId = escapeSingleQuoteJs(alt.id);
+          const thumb = alt.imageUrl || fallbackImg;
+          const altSub = isFallbackGroup ? getExerciseSubMuscle(alt) : (alt.equipment || "");
+
+          return `
+            <div class="swap-alt-row">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
+                <div class="swap-alt-thumb">
+                  <img src="${esc(thumb)}" alt="${esc(alt.name)}" loading="lazy" onerror="this.onerror=null;this.src='${esc(fallbackImg)}';" />
+                </div>
+                <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:3px;">
+                  <div style="font-size:13px;font-weight:700;color:#F5F5F7;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                    ${esc(alt.name)}
+                  </div>
+                  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:11px;color:#8E8E93;font-variant-numeric:tabular-nums;">
+                    ${altSub ? `<span>${esc(altSub)}</span>` : ""}
+                    ${prShort ? `<span class="alt-pr-chip"><i data-lucide="trophy" style="width:11px;height:11px;stroke-width:2;"></i>${esc(prShort)}</span>` : ""}
+                    ${alreadyInWorkout ? `<span class="swap-in-workout-tag">Deja în sesiune</span>` : ""}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="swap-action-btn"
+                onclick="swapActiveWorkoutExercise('${safeItemId}', '${safeAltId}')"
+              >
+                Schimbă
+              </button>
+            </div>
+          `;
+        })
+        .join("")
+    : `
+      <div style="padding:24px 14px;text-align:center;color:#8E8E93;font-size:13px;">
+        Nu mai există alte exerciții disponibile în această grupă.
+      </div>
+    `;
+
+  const wrapper = document.createElement("div");
+  wrapper.id = "titan-swap-modal-root";
+  wrapper.innerHTML = `
+    <div
+      class="swap-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Înlocuiește exercițiul"
+      onclick="if (event.target === this) closeSwapExerciseModal()"
+    >
+      <div class="swap-modal-panel">
+        <div class="swap-modal-head">
+          <div style="min-width:0;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <i data-lucide="arrow-left-right" style="width:16px;height:16px;color:#FF4D00;stroke-width:2;"></i>
+              <h3 style="margin:0;font-size:15px;font-weight:800;color:#F5F5F7;letter-spacing:-0.01em;">Înlocuiește exercițiul</h3>
+            </div>
+            <div style="font-size:12px;color:#8E8E93;line-height:1.35;">
+              Acum: <strong style="color:#E4E4E7;">${esc(currentEx.name)}</strong><br />
+              ${subtitleHTML}
+            </div>
+            <div class="submuscle-badge">
+              <i data-lucide="target" style="width:12px;height:12px;color:#FF4D00;stroke-width:2;"></i>
+              <span>${esc(subMuscle)}</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            onclick="closeSwapExerciseModal()"
+            style="width:34px;height:34px;border-radius:10px;background:#18181C;border:1px solid rgba(255,255,255,0.08);color:#A1A1AA;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;"
+            aria-label="Închide"
+          >
+            <i data-lucide="x" style="width:16px;height:16px;"></i>
+          </button>
+        </div>
+
+        <div class="swap-modal-body">
+          ${rowsHTML}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(wrapper);
+  if (typeof refreshLucideIcons === "function") {
+    refreshLucideIcons();
+  } else if (window.lucide) {
+    window.lucide.createIcons();
+  }
+};
+
+// 5. Logica efectivă de înlocuire în antrenamentul activ
+window.swapActiveWorkoutExercise = function (activeItemId, newExerciseId) {
+  if (typeof state === "undefined" || !Array.isArray(state.activeExercises)) return;
+
+  const targetItem = state.activeExercises.find((it) => String(it.id) === String(activeItemId));
+  const newEx = resolveExerciseObject(newExerciseId);
+  if (!targetItem || !newEx) return;
+
+  targetItem.exerciseId = newEx.id;
+  if ("name" in targetItem) targetItem.name = newEx.name;
+  if ("exerciseName" in targetItem) targetItem.exerciseName = newEx.name;
+
+  // Păstrează același număr de serii, dar resetează valorile ca să nu transfere greutăți/PR-uri false
+  const prevSets = Array.isArray(targetItem.sets) && targetItem.sets.length > 0 ? targetItem.sets : [{ weight: "", reps: "", completed: false }];
+  targetItem.sets = prevSets.map((s, idx) => {
+    const cleanSet = { ...s };
+    if ("id" in cleanSet) cleanSet.id = `set-${Date.now()}-${idx}`;
+    cleanSet.weight = "";
+    cleanSet.reps = "";
+    if ("kg" in cleanSet) cleanSet.kg = "";
+    cleanSet.completed = false;
+    if ("done" in cleanSet) cleanSet.done = false;
+    if ("checked" in cleanSet) cleanSet.checked = false;
+    return cleanSet;
+  });
+
+  window.closeSwapExerciseModal();
+
+  if (typeof persistAllState === "function") persistAllState();
+  if (typeof renderApp === "function") renderApp();
+  if (typeof showToast === "function") {
+    showToast(`Exercițiu schimbat: ${newEx.name}`, "info");
+  }
+};
+
+// Închidere rapidă cu tasta Escape pe desktop
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && document.getElementById("titan-swap-modal-root")) {
+    window.closeSwapExerciseModal();
+  }
+});
+
+/* === MODIFICAREA #4: TAP MOBIL SCANNER + PANOU DETALII + EXPORT PUBLIC PENTRU DUEL === */
+
+const TITAN_ANATOMY_GROUPS = ["Piept", "Spate", "Picioare", "Umeri", "Brațe"];
+
+function normalizeAnatomyGroupKey(str) {
+  return String(str || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getAnatomyWorkoutsList() {
+  if (typeof state === "undefined") return [];
+  if (Array.isArray(state.workouts)) return state.workouts;
+  if (Array.isArray(state.history)) return state.history;
+  return [];
+}
+
+function getAnatomyCatalogList() {
+  if (typeof state !== "undefined" && Array.isArray(state.exercises) && state.exercises.length) {
+    return state.exercises;
+  }
+  if (typeof INITIAL_EXERCISES !== "undefined" && Array.isArray(INITIAL_EXERCISES)) {
+    return INITIAL_EXERCISES;
+  }
+  return [];
+}
+
+function resolveMuscleGroupFromWorkoutEx(workoutEx, catalog) {
+  const rawId = normalizeAnatomyGroupKey(workoutEx.exerciseId || workoutEx.id);
+  const rawName = normalizeAnatomyGroupKey(workoutEx.name || workoutEx.title);
+
+  const matchCatalog = catalog.find(
+    (c) =>
+      (rawId && normalizeAnatomyGroupKey(c.id) === rawId) ||
+      (rawName && normalizeAnatomyGroupKey(c.name) === rawName)
+  );
+
+  const groupRaw = normalizeAnatomyGroupKey(
+    (matchCatalog && matchCatalog.primaryMuscle) ||
+      workoutEx.primaryMuscle ||
+      workoutEx.muscleGroup ||
+      workoutEx.muscle ||
+      ""
+  );
+
+  if (groupRaw.includes("piept") || groupRaw.includes("chest")) return "Piept";
+  if (groupRaw.includes("spate") || groupRaw.includes("back")) return "Spate";
+  if (groupRaw.includes("picioare") || groupRaw.includes("leg")) return "Picioare";
+  if (groupRaw.includes("umeri") || groupRaw.includes("shoulder")) return "Umeri";
+  if (groupRaw.includes("brate") || groupRaw.includes("arm") || groupRaw.includes("bicep") || groupRaw.includes("tricep")) return "Brațe";
+
+  return "";
+}
+
+function formatRelativeWorkoutTime(timestamp) {
+  if (!timestamp) return "Nicio sesiune înregistrată";
+  const diffMs = Math.max(0, Date.now() - timestamp);
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 60) return diffMins <= 2 ? "Chiar acum" : `Acum ${diffMins} min`;
+  if (diffHours < 24) return diffHours === 1 ? "Acum 1 oră" : `Acum ${diffHours} ore`;
+  if (diffDays === 1) return "Ieri";
+  if (diffDays < 30) return `Acum ${diffDays} zile`;
+
+  try {
+    return new Date(timestamp).toLocaleDateString("ro-RO", { day: "numeric", month: "short" });
+  } catch (e) {
+    return `Acum ${diffDays} zile`;
+  }
+}
+
+// Extrage ultima sesiune, nr. de serii și exercițiul cu cel mai bun scor pe grupa dată
+function getMuscleHistoryDetails(muscleName) {
+  const workouts = getAnatomyWorkoutsList();
+  const catalog = getAnatomyCatalogList();
+
+  let lastTimestamp = 0;
+  let lastSessionSets = 0;
+  let bestExerciseName = "";
+  let bestRaw1RM = 0;
+  let bestWeight = 0;
+  let bestReps = 0;
+
+  workouts.forEach((w) => {
+    if (!w || !Array.isArray(w.exercises)) return;
+    const rawDate = w.date || w.createdAt || w.timestamp || "";
+    const ts = typeof rawDate === "number" ? rawDate : Date.parse(rawDate) || 0;
+
+    let setsInThisWorkout = 0;
+
+    w.exercises.forEach((wEx) => {
+      if (!wEx) return;
+      const mappedGroup = resolveMuscleGroupFromWorkoutEx(wEx, catalog);
+      if (mappedGroup !== muscleName) return;
+
+      const catMatch = catalog.find(
+        (c) =>
+          c.id === (wEx.exerciseId || wEx.id) ||
+          normalizeAnatomyGroupKey(c.name) === normalizeAnatomyGroupKey(wEx.name || wEx.title)
+      );
+      const displayName = (catMatch && catMatch.name) || wEx.name || wEx.title || "";
+
+      const sets = Array.isArray(wEx.sets) ? wEx.sets : [];
+      sets.forEach((s) => {
+        if (!s) return;
+        if (s.completed === false || s.done === false || s.checked === false) return;
+
+        const reps = parseInt(s.reps, 10);
+        if (!Number.isFinite(reps) || reps <= 0) return;
+
+        setsInThisWorkout += 1;
+
+        const parsedW = parseFloat(s.weight ?? s.kg ?? 0);
+        const weight = Number.isFinite(parsedW) && parsedW > 0 ? parsedW : 0;
+        const raw1RM = weight > 0 ? (reps === 1 ? weight : weight * (1 + reps / 30)) : 0;
+
+        const isBetter =
+          raw1RM > bestRaw1RM + 1e-6 ||
+          (Math.abs(raw1RM - bestRaw1RM) <= 1e-6 &&
+            ((weight === 0 && bestWeight === 0 && reps > bestReps) || weight > bestWeight));
+
+        if (isBetter && displayName) {
+          bestRaw1RM = raw1RM;
+          bestWeight = weight;
+          bestReps = reps;
+          bestExerciseName = displayName;
+        }
+      });
+    });
+
+    if (setsInThisWorkout > 0 && ts >= lastTimestamp) {
+      lastTimestamp = ts;
+      lastSessionSets = setsInThisWorkout;
+    }
+  });
+
+  return {
+    lastTimestamp,
+    lastSessionSets,
+    bestExerciseName,
+    best1RM: Math.round(bestRaw1RM * 10) / 10,
+    bestWeight,
+    bestReps
+  };
+}
+
+// Calculează timpul exact rămas până la 100% recuperare
+function estimateRecoveryHoursRemaining(muscleName, recoveryPct, infoObj, historyInfo) {
+  const rec = Math.max(0, Math.min(100, Math.round(Number(recoveryPct ?? 100))));
+  if (rec >= 100) {
+    return { isFull: true, hours: 0, text: "Recuperat complet ✓" };
+  }
+
+  // Dacă map-ul tău de recuperare expune deja orele rămase, le folosim direct
+  const directHours = infoObj && (infoObj.hoursRemaining ?? infoObj.remainingHours ?? infoObj.hoursLeft);
+  if (typeof directHours === "number" && Number.isFinite(directHours) && directHours > 0) {
+    const h = Math.ceil(directHours);
+    return {
+      isFull: false,
+      hours: h,
+      text: h === 1 ? "~1 oră rămasă până la 100%" : `~${h} ore rămase până la 100%`
+    };
+  }
+
+  const isLargeMuscle = muscleName === "Piept" || muscleName === "Spate" || muscleName === "Picioare";
+  const defaultWindowHours = isLargeMuscle ? 72 : 48;
+
+  let remainingHours = ((100 - rec) / 100) * defaultWindowHours;
+
+  // Deducem exact fereastra reală din timpul scurs de la ultima sesiune (când e în plaja fiziologică 24h–96h)
+  if (historyInfo && historyInfo.lastTimestamp > 0) {
+    const elapsedHours = Math.max(0, (Date.now() - historyInfo.lastTimestamp) / 3600000);
+    if (elapsedHours >= 1 && rec >= 8) {
+      const inferredWindow = elapsedHours / (rec / 100);
+      if (inferredWindow >= 20 && inferredWindow <= 108) {
+        remainingHours = Math.max(0.5, inferredWindow - elapsedHours);
+      }
+    }
+  }
+
+  if (remainingHours < 1) {
+    return { isFull: false, hours: 1, text: "< 1 oră rămasă până la 100%" };
+  }
+
+  const rounded = Math.round(remainingHours);
+  return {
+    isFull: false,
+    hours: rounded,
+    text: rounded === 1 ? "~1 oră rămasă până la 100%" : `~${rounded} ore rămase până la 100%`
+  };
+}
+
+// Alege grupa activă (păstrează selecția la schimbarea modului; la prima deschidere preferă ultima grupă lucrată sau Piept)
+function getActiveAnatomyMuscle(dataMap) {
+  if (window.titanAnatomySelectedMuscle && TITAN_ANATOMY_GROUPS.includes(window.titanAnatomySelectedMuscle)) {
+    return window.titanAnatomySelectedMuscle;
+  }
+
+  const stateSelected =
+    typeof state !== "undefined" &&
+    (state.selectedPredictiveMuscle ||
+      state.predictiveMuscle ||
+      state.selectedMuscle ||
+      state.selectedMuscleGroup ||
+      state.activeMuscle);
+
+  if (stateSelected && TITAN_ANATOMY_GROUPS.includes(stateSelected)) {
+    window.titanAnatomySelectedMuscle = stateSelected;
+    return stateSelected;
+  }
+
+  // La prima deschidere, pre-selectăm ultima grupă lucrată (dacă există), altfel Piept
+  let latestGroup = "Piept";
+  let latestTs = 0;
+  TITAN_ANATOMY_GROUPS.forEach((grp) => {
+    const h = getMuscleHistoryDetails(grp);
+    if (h.lastTimestamp > latestTs) {
+      latestTs = h.lastTimestamp;
+      latestGroup = grp;
+    }
+  });
+
+  window.titanAnatomySelectedMuscle = latestGroup;
+  return latestGroup;
+}
+
+// Handler unic de Tap / Click (mobil + desktop)
+window.selectAnatomyMuscleTap = function (muscleName) {
+  if (!muscleName) return;
+  window.titanAnatomySelectedMuscle = muscleName;
+
+  if (typeof handleAnatomyLeave === "function") handleAnatomyLeave();
+
+  // Pe mobil, comutăm automat pe fața potrivită când alegi Piept sau Spate din pastile
+  if (muscleName === "Spate") {
+    window.__anatomyMobileView = "back";
+  } else if (muscleName === "Piept") {
+    window.__anatomyMobileView = "front";
+  }
+
+  if (typeof window.selectPredictiveMuscle === "function") {
+    window.selectPredictiveMuscle(muscleName);
+  } else if (typeof state !== "undefined") {
+    if ("selectedPredictiveMuscle" in state) state.selectedPredictiveMuscle = muscleName;
+    if ("selectedMuscle" in state) state.selectedMuscle = muscleName;
+    if ("selectedMuscleGroup" in state) state.selectedMuscleGroup = muscleName;
+    if (typeof renderApp === "function") renderApp();
+  }
+
+  // Siguranță: dacă selectPredictiveMuscle nu a re-randat scannerul, forțăm renderApp()
+  const panel = document.getElementById("anatomy-detail-panel");
+  if (!panel || panel.getAttribute("data-selected-muscle") !== muscleName) {
+    if (typeof renderApp === "function") renderApp();
+  }
+};
+
+// Elimină bug-ul de „primul tap = hover” pe iOS Safari (păstrează hover-ul normal pe laptop)
+(function patchAnatomyHoverForTouch() {
+  const origHover = window.handleAnatomyHover;
+  if (typeof origHover === "function" && !origHover.__titanTouchSafe) {
+    const wrappedHover = function (event, muscleName) {
+      if (!window.matchMedia || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        return;
+      }
+      return origHover(event, muscleName);
+    };
+    wrappedHover.__titanTouchSafe = true;
+    window.handleAnatomyHover = wrappedHover;
+  }
+
+  // Sincronizează selecția și atunci când dai click din lista „Nivel pe Grupe Musculare”
+  const origPredictive = window.selectPredictiveMuscle;
+  if (typeof origPredictive === "function" && !origPredictive.__titanAnatomySync) {
+    const wrappedPredictive = function (muscleName, ...rest) {
+      if (muscleName && TITAN_ANATOMY_GROUPS.includes(muscleName)) {
+        window.titanAnatomySelectedMuscle = muscleName;
+      }
+      return origPredictive.apply(this, [muscleName, ...rest]);
+    };
+    wrappedPredictive.__titanAnatomySync = true;
+    window.selectPredictiveMuscle = wrappedPredictive;
+  }
+})();
+
+// Randează cele 5 pastile rapide + panoul fix de detalii sub silueta SVG
+function renderAnatomyQuickPillsAndDetailHTML(dataMap, activeMuscle, isRecovery) {
+  const esc = typeof escapeHtml === "function" ? escapeHtml : (s) => String(s || "");
+
+  const getGroupNeonColor = (muscleName) => {
+    const info = dataMap[muscleName] || { level: "Neinițiat", oneRM: 0, recovery: 100 };
+    if (isRecovery) {
+      return typeof getAnatomyRecoveryColor === "function"
+        ? getAnatomyRecoveryColor(info.recovery)
+        : info.recovery < 50
+          ? "#FF2E55"
+          : info.recovery < 90
+            ? "#FFD600"
+            : "#00FF88";
+    }
+    const st =
+      typeof getAnatomyLevelStyle === "function"
+        ? getAnatomyLevelStyle(info.level, info.oneRM)
+        : { fill: "#2A3347", badgeColor: "#94A3B8" };
+    return info.oneRM > 0 ? st.badgeColor || st.fill : "#94A3B8";
+  };
+
+  const pillsHTML = TITAN_ANATOMY_GROUPS.map((grp) => {
+    const isSelected = grp === activeMuscle;
+    const accent = getGroupNeonColor(grp);
+    const info = dataMap[grp] || { oneRM: 0, recovery: 100 };
+    const dotBg = !isRecovery && (!info.oneRM || info.oneRM <= 0) ? "#64748B" : accent;
+
+    return `
+      <button
+        type="button"
+        class="anatomy-pill-btn ${isSelected ? "is-active" : ""}"
+        style="--pill-accent:${accent};"
+        onclick="selectAnatomyMuscleTap('${grp}')"
+      >
+        <span class="anatomy-pill-dot" style="background:${dotBg};${dotBg !== "#64748B" ? `box-shadow:0 0 6px ${dotBg};` : ""}"></span>
+        <span>${grp}</span>
+      </button>
+    `;
+  }).join("");
+
+  const info = dataMap[activeMuscle] || { level: "Neinițiat", oneRM: 0, recovery: 100 };
+  const historyInfo = getMuscleHistoryDetails(activeMuscle);
+  const accent = getGroupNeonColor(activeMuscle);
+
+  let panelInnerHTML = "";
+
+  if (isRecovery) {
+    const recPct = Math.max(0, Math.min(100, Math.round(Number(info.recovery ?? 100))));
+    const rem = estimateRecoveryHoursRemaining(activeMuscle, recPct, info, historyInfo);
+    const lastWorkedText =
+      historyInfo.lastTimestamp > 0
+        ? `${formatRelativeWorkoutTime(historyInfo.lastTimestamp)} • ${historyInfo.lastSessionSets} ${historyInfo.lastSessionSets === 1 ? "serie" : "serii"}`
+        : "Nicio sesiune înregistrată";
+
+    panelInnerHTML = `
+      <div class="anatomy-detail-top">
+        <div class="anatomy-detail-name-wrap">
+          <span class="anatomy-detail-name">${esc(activeMuscle)}</span>
+          <span class="anatomy-detail-mode-tag">Recuperare</span>
+        </div>
+        <span class="anatomy-detail-big-value" style="color:${accent};text-shadow:0 0 12px ${accent}55;">
+          ${recPct}%
+        </span>
+      </div>
+
+      <div class="anatomy-rec-track">
+        <div
+          class="anatomy-rec-fill"
+          style="width:${recPct}%;background:${accent};box-shadow:0 0 10px ${accent}99;"
+        ></div>
+      </div>
+
+      <div class="anatomy-detail-meta-grid">
+        <div class="anatomy-detail-meta-row">
+          <span class="anatomy-detail-meta-label">
+            <i data-lucide="${rem.isFull ? "check-circle-2" : "clock"}" style="width:13px;height:13px;color:${accent};stroke-width:2;"></i>
+            Status refacere
+          </span>
+          <span class="anatomy-detail-meta-val" style="color:${rem.isFull ? "#00FF88" : "#F5F5F7"};">
+            ${esc(rem.text)}
+          </span>
+        </div>
+        <div class="anatomy-detail-meta-row">
+          <span class="anatomy-detail-meta-label">
+            <i data-lucide="activity" style="width:13px;height:13px;color:#94A3B8;stroke-width:1.9;"></i>
+            Ultima sesiune
+          </span>
+          <span class="anatomy-detail-meta-val">${esc(lastWorkedText)}</span>
+        </div>
+      </div>
+    `;
+  } else {
+    const rmVal = Math.round((Number(info.oneRM) || 0) * 10) / 10;
+    const st =
+      typeof getAnatomyLevelStyle === "function"
+        ? getAnatomyLevelStyle(info.level, rmVal)
+        : { label: "Neinițiat", badgeColor: "#94A3B8" };
+    const bestExLabel = historyInfo.bestExerciseName || info.bestExercise || "Niciun exercițiu salvat încă";
+
+    panelInnerHTML = `
+      <div class="anatomy-detail-top">
+        <div class="anatomy-detail-name-wrap">
+          <span class="anatomy-detail-name">${esc(activeMuscle)}</span>
+          <span class="anatomy-detail-tier-pill" style="--panel-accent:${st.badgeColor};">
+            ${esc(st.label)}
+          </span>
+        </div>
+        <span class="anatomy-detail-big-value" style="color:${rmVal > 0 ? st.badgeColor : "#94A3B8"};${rmVal > 0 ? `text-shadow:0 0 12px ${st.badgeColor}55;` : ""}">
+          ${rmVal} <span style="font-size:15px;font-weight:700;color:#94A3B8;">kg</span>
+        </span>
+      </div>
+
+      <div class="anatomy-detail-meta-grid">
+        <div class="anatomy-detail-meta-row">
+          <span class="anatomy-detail-meta-label">
+            <i data-lucide="trophy" style="width:13px;height:13px;color:${st.badgeColor};stroke-width:2;"></i>
+            Cel mai bun exercițiu
+          </span>
+          <span class="anatomy-detail-meta-val">${esc(bestExLabel)}</span>
+        </div>
+        <div class="anatomy-detail-meta-row">
+          <span class="anatomy-detail-meta-label">
+            <i data-lucide="dumbbell" style="width:13px;height:13px;color:#94A3B8;stroke-width:1.9;"></i>
+            1RM Estimat (grupă)
+          </span>
+          <span class="anatomy-detail-meta-val">${rmVal > 0 ? `${rmVal} kg • ${esc(st.label)}` : "Fără serii înregistrate"}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="anatomy-pills-row" role="tablist" aria-label="Selectează grupa musculară">
+      ${pillsHTML}
+    </div>
+    <div
+      id="anatomy-detail-panel"
+      class="anatomy-detail-panel"
+      data-selected-muscle="${esc(activeMuscle)}"
+      style="--panel-accent:${accent};"
+    >
+      ${panelInnerHTML}
+    </div>
+  `;
+}
+
+// Calculează streak-ul real de zile consecutive (fallback dacă getOverallStats nu expune streakDays)
+function computeWorkoutStreakDays(workouts) {
+  if (!Array.isArray(workouts) || !workouts.length) return 0;
+
+  const toLocalDayKey = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const daySet = new Set();
+  workouts.forEach((w) => {
+    const raw = w && (w.date || w.createdAt || w.timestamp);
+    if (!raw) return;
+    const d = new Date(raw);
+    if (!Number.isNaN(d.getTime())) daySet.add(toLocalDayKey(d));
+  });
+
+  if (!daySet.size) return 0;
+
+  const cursor = new Date();
+  cursor.setHours(12, 0, 0, 0);
+
+  // Dacă nu te-ai antrenat încă azi, verificăm de ieri
+  if (!daySet.has(toLocalDayKey(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+    if (!daySet.has(toLocalDayKey(cursor))) return 0;
+  }
+
+  let streak = 0;
+  while (daySet.has(toLocalDayKey(cursor))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
+// Export sumar public competitiv pentru modulul de Duel din cloud.js (STRICT fără recuperare / date private)
+window.exportTitanPublicStats = function (forceDispatch) {
+  try {
+    const workouts = getAnatomyWorkoutsList();
+    const dataMap = typeof getAnatomyMuscleDataMap === "function" ? getAnatomyMuscleDataMap() : {};
+
+    // Construim corect parametrul `analyses` așteptat de getOverallStats(analyses)
+    let overall = {};
+    if (typeof getOverallStats === "function") {
+      try {
+        let analyses = null;
+        if (typeof analyzeMuscleStrength === "function") {
+          if (analyzeMuscleStrength.length >= 1) {
+            analyses = TITAN_ANATOMY_GROUPS.map((g) => analyzeMuscleStrength(g)).filter(Boolean);
+          } else {
+            const rawA = analyzeMuscleStrength();
+            if (Array.isArray(rawA)) {
+              analyses = rawA;
+            } else if (rawA && typeof rawA === "object") {
+              const vals = Object.values(rawA);
+              if (vals.length > 0 && typeof vals[0] === "object" && vals[0] !== null) {
+                analyses = vals;
+              } else {
+                analyses = TITAN_ANATOMY_GROUPS.map((g) => analyzeMuscleStrength(g)).filter(Boolean);
+              }
+            }
+          }
+        }
+
+        if (!Array.isArray(analyses) || !analyses.length) {
+          analyses = TITAN_ANATOMY_GROUPS.map((g) => {
+            const info = dataMap[g] || {};
+            return {
+              muscle: g,
+              group: g,
+              oneRM: Number(info.oneRM) || 0,
+              best1RM: Number(info.oneRM) || 0,
+              level: info.level || "Neinițiat"
+            };
+          });
+        }
+
+        overall = getOverallStats(analyses) || {};
+      } catch (innerErr) {
+        overall = {};
+      }
+    }
+
+    // Total sesiuni
+    const totalSessions =
+      Number(overall.totalSessions ?? overall.sessions ?? overall.totalWorkouts ?? workouts.length) || 0;
+
+    // Volum total (kg)
+    let computedVolume = 0;
+    workouts.forEach((w) => {
+      if (!w || !Array.isArray(w.exercises)) return;
+      w.exercises.forEach((ex) => {
+        if (!ex || !Array.isArray(ex.sets)) return;
+        ex.sets.forEach((s) => {
+          if (!s || s.completed === false || s.done === false || s.checked === false) return;
+          const wt = parseFloat(s.weight ?? s.kg ?? 0);
+          const rp = parseInt(s.reps, 10);
+          if (Number.isFinite(wt) && wt > 0 && Number.isFinite(rp) && rp > 0) {
+            computedVolume += wt * rp;
+          }
+        });
+      });
+    });
+
+    const rawVol = overall.totalVolumeKg ?? overall.totalVolume ?? overall.volumeKg;
+    const totalVolumeKg = Math.round(
+      typeof rawVol === "number" && Number.isFinite(rawVol) ? rawVol : computedVolume
+    );
+
+    // Nivel numeric
+    let level = 0;
+    const rawLevel = overall.levelNumber ?? overall.levelNum ?? overall.level ?? overall.currentLevel;
+    if (typeof rawLevel === "number" && Number.isFinite(rawLevel)) {
+      level = rawLevel;
+    } else if (typeof rawLevel === "string") {
+      const digitMatch = rawLevel.match(/\d+/);
+      if (digitMatch) {
+        level = parseInt(digitMatch[0], 10) || 0;
+      } else {
+        const tierNumMap = { neinitiat: 0, incepator: 1, intermediar: 2, avansat: 3, elita: 4 };
+        const normLvl = normalizeAnatomyGroupKey(rawLevel);
+        level =
+          normLvl in tierNumMap
+            ? tierNumMap[normLvl]
+            : totalSessions > 0
+              ? Math.floor(totalSessions / 3) + 1
+              : 0;
+      }
+    } else if (totalSessions > 0) {
+      level = Math.floor(totalSessions / 3) + 1;
+    }
+
+    // Streak zile
+    const rawStreak = overall.streakDays ?? overall.streak ?? overall.currentStreak ?? overall.activeStreak;
+    const streakDays =
+      typeof rawStreak === "number" && Number.isFinite(rawStreak)
+        ? Math.max(0, Math.round(rawStreak))
+        : computeWorkoutStreakDays(workouts);
+
+    const buildPublicMuscle = (roName) => {
+      const info = dataMap[roName] || { level: "Neinițiat", oneRM: 0 };
+      const rm = Math.round((Number(info.oneRM) || 0) * 10) / 10;
+      const tier =
+        typeof getAnatomyLevelStyle === "function"
+          ? getAnatomyLevelStyle(info.level, rm).label
+          : rm > 0
+            ? String(info.level || "Începător")
+            : "Neinițiat";
+      const hist = getMuscleHistoryDetails(roName);
+      return {
+        rm,
+        tier,
+        bestExercise: hist.bestExerciseName || ""
+      };
+    };
+
+    const publicStats = {
+      level,
+      totalSessions,
+      streakDays,
+      totalVolumeKg,
+      muscles: {
+        chest: buildPublicMuscle("Piept"),
+        back: buildPublicMuscle("Spate"),
+        legs: buildPublicMuscle("Picioare"),
+        shoulders: buildPublicMuscle("Umeri"),
+        arms: buildPublicMuscle("Brațe")
+      }
+    };
+
+    const serialized = JSON.stringify(publicStats);
+    const prevStored = localStorage.getItem("titanlift_public_stats");
+
+    if (forceDispatch || prevStored !== serialized || !window.__titanPublicStatsDispatchedOnce) {
+      localStorage.setItem("titanlift_public_stats", serialized);
+      window.__titanPublicStatsDispatchedOnce = true;
+      window.dispatchEvent(new CustomEvent("titan-public-stats-updated"));
+    }
+  } catch (err) {
+    console.warn("Eroare export titanlift_public_stats:", err);
+  }
+};
+
+// Declanșare automată la salvarea unui antrenament + la încărcarea paginii
+(function initPublicStatsExportHooks() {
+  if (typeof window.saveActiveWorkout === "function" && !window.saveActiveWorkout.__titanStatsWrapped) {
+    const origSave = window.saveActiveWorkout;
+    window.saveActiveWorkout = function (...args) {
+      const res = origSave.apply(this, args);
+      setTimeout(() => window.exportTitanPublicStats(true), 50);
+      return res;
+    };
+    window.saveActiveWorkout.__titanStatsWrapped = true;
+  }
+
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(() => window.exportTitanPublicStats(true), 120);
+  } else {
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => window.exportTitanPublicStats(true), 120);
+    });
+  }
+})();
+
+  /* === MODIFICAREA #7: CLICK PE ZILELE DIN CALENDARUL DE CONSISTENȚĂ (STREAK) === */
+
+function getLocalDateKey(dateValue) {
+  if (!dateValue) return "";
+
+  if (typeof dateValue === "string") {
+    const trimmed = dateValue.trim();
+    // Dacă este deja în format curat YYYY-MM-DD, îl returnăm direct (fără risc de shift UTC)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      return trimmed;
+    }
+  }
+
+  const d = dateValue instanceof Date ? dateValue : new Date(dateValue);
+  if (Number.isNaN(d.getTime())) return "";
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatConsistencyShortDate(dateKey) {
+  if (!dateKey || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return String(dateKey || "");
+  const [y, m, d] = dateKey.split("-").map(Number);
+  const localDate = new Date(y, m - 1, d);
+  try {
+    return localDate.toLocaleDateString("ro-RO", {
+      day: "numeric",
+      month: "short"
+    });
+  } catch (e) {
+    return `${d}.${m}`;
+  }
+}
+
+window.showConsistencyToast = function (message, isCardio) {
+  let toast = document.getElementById("titan-consistency-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "titan-consistency-toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    document.body.appendChild(toast);
+  }
+
+  const dotColor = isCardio ? "#FF4D00" : "#64748B";
+  const esc = typeof escapeHtml === "function" ? escapeHtml : (s) => String(s || "");
+
+  toast.classList.toggle("is-cardio", Boolean(isCardio));
+  toast.innerHTML = `
+    <span style="width:7px;height:7px;border-radius:999px;background:${dotColor};flex-shrink:0;${isCardio ? "box-shadow:0 0 8px rgba(255,77,0,0.75);" : ""}"></span>
+    <span>${esc(message)}</span>
+  `;
+
+  toast.classList.add("is-visible");
+
+  if (window.__titanConsistencyToastTimer) {
+    clearTimeout(window.__titanConsistencyToastTimer);
+  }
+  window.__titanConsistencyToastTimer = setTimeout(() => {
+    toast.classList.remove("is-visible");
+  }, 2200);
+};
+
+function formatDayDetailWeight(val) {
+  const num = Math.round((Number(val) || 0) * 100) / 100;
+  return Number.isInteger(num) ? String(num) : String(num);
+}
+
+function formatDayDetailDuration(workout) {
+  if (!workout) return "—";
+  const secVal = workout.durationSeconds ?? workout.durationSec ?? workout.elapsedSeconds;
+  if (typeof secVal === "number" && Number.isFinite(secVal) && secVal > 0) {
+    const mins = Math.max(1, Math.round(secVal / 60));
+    if (mins >= 60) {
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return m > 0 ? `${h}h ${m}m` : `${h}h`;
+    }
+    return `${mins} min`;
+  }
+
+  const minVal = workout.durationMinutes ?? workout.durationMin;
+  if (typeof minVal === "number" && Number.isFinite(minVal) && minVal > 0) {
+    return `${Math.round(minVal)} min`;
+  }
+
+  if (typeof workout.duration === "string" && workout.duration.trim()) {
+    return workout.duration.trim();
+  }
+
+  if (typeof workout.duration === "number" && Number.isFinite(workout.duration) && workout.duration > 0) {
+    // Dacă valoarea numerică pare salvată în secunde (>= 240), o convertim în minute
+    const mins = workout.duration >= 240 ? Math.round(workout.duration / 60) : Math.round(workout.duration);
+    return `${Math.max(1, mins)} min`;
+  }
+
+  return "—";
+}
+
+function resolveDayDetailExerciseInfo(workoutEx) {
+  const catalog =
+    typeof state !== "undefined" && Array.isArray(state.exercises) && state.exercises.length
+      ? state.exercises
+      : typeof INITIAL_EXERCISES !== "undefined" && Array.isArray(INITIAL_EXERCISES)
+        ? INITIAL_EXERCISES
+        : [];
+
+  const norm = (s) =>
+    String(s || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+  const targetId = norm(workoutEx.exerciseId || workoutEx.id);
+  const targetName = norm(workoutEx.name || workoutEx.title);
+
+  const found = catalog.find(
+    (c) => (targetId && norm(c.id) === targetId) || (targetName && norm(c.name) === targetName)
+  );
+
+  return {
+    name: (found && found.name) || workoutEx.name || workoutEx.title || "Exercițiu",
+    muscle: (found && found.primaryMuscle) || workoutEx.primaryMuscle || workoutEx.muscleGroup || ""
+  };
+}
+
+window.closeConsistencyDetailOverlay = function () {
+  const el = document.getElementById("titan-day-detail-overlay");
+  if (el) el.remove();
+  document.body.style.overflow = "";
+};
+
+window.openConsistencyDayOverlay = function (workoutsList, dateKey) {
+  window.closeConsistencyDetailOverlay();
+
+  const list = Array.isArray(workoutsList) ? workoutsList.filter(Boolean) : workoutsList ? [workoutsList] : [];
+  if (!list.length) return;
+
+  const esc = typeof escapeHtml === "function" ? escapeHtml : (s) => String(s || "");
+
+  // Formatăm frumos data completă pentru antet (ex. „23 nov. 2026”)
+  let fullDateLabel = "";
+  const resolvedKey = dateKey || getLocalDateKey(list[0].date || list[0].createdAt || list[0].timestamp);
+  if (resolvedKey && /^\d{4}-\d{2}-\d{2}$/.test(resolvedKey)) {
+    const [y, m, d] = resolvedKey.split("-").map(Number);
+    try {
+      fullDateLabel = new Date(y, m - 1, d).toLocaleDateString("ro-RO", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+    } catch (e) {
+      fullDateLabel = resolvedKey;
+    }
+  } else {
+    fullDateLabel = resolvedKey || "Antrenament";
+  }
+
+  const sessionsHTML = list
+    .map((workout, wIdx) => {
+      const title =
+        workout.name ||
+        workout.title ||
+        workout.templateName ||
+        (list.length > 1 ? `Antrenament #${wIdx + 1}` : "Antrenament Forță");
+
+      const exercises = Array.isArray(workout.exercises) ? workout.exercises : [];
+      let totalSetsCount = 0;
+      let totalVolumeKg = 0;
+
+      const exercisesHTML = exercises.length
+        ? exercises
+            .map((wEx) => {
+              const info = resolveDayDetailExerciseInfo(wEx);
+              const rawSets = Array.isArray(wEx.sets) ? wEx.sets : [];
+              const validSets = rawSets.filter((s) => {
+                if (!s) return false;
+                if (s.completed === false || s.done === false || s.checked === false) return false;
+                const r = parseInt(s.reps, 10);
+                return Number.isFinite(r) && r > 0;
+              });
+
+              const setsToRender = validSets.length ? validSets : rawSets.filter(Boolean);
+
+              const rowsHTML = setsToRender.length
+                ? setsToRender
+                    .map((s, sIdx) => {
+                      const reps = parseInt(s.reps, 10) || 0;
+                      const parsedW = parseFloat(s.weight ?? s.kg ?? 0);
+                      const weight = Number.isFinite(parsedW) && parsedW > 0 ? parsedW : 0;
+
+                      if (reps > 0 && s.completed !== false && s.done !== false && s.checked !== false) {
+                        totalSetsCount += 1;
+                        if (weight > 0) totalVolumeKg += weight * reps;
+                      }
+
+                      const est1RM =
+                        weight > 0 && reps > 0
+                          ? Math.round((reps === 1 ? weight : weight * (1 + reps / 30)) * 10) / 10
+                          : 0;
+
+                      return `
+                        <div class="titan-day-set-row">
+                          <span class="titan-day-set-num">${sIdx + 1}</span>
+                          <span>${weight > 0 ? `${formatDayDetailWeight(weight)} kg` : "BW"}</span>
+                          <span>${reps} rep</span>
+                          <span style="text-align:right;color:${est1RM > 0 ? "#FF7A40" : "#8E8E93"};font-size:12px;">
+                            ${est1RM > 0 ? `${est1RM.toFixed(1)} kg` : "—"}
+                          </span>
+                        </div>
+                      `;
+                    })
+                    .join("")
+                : `<div style="font-size:12px;color:#8E8E93;padding:4px 2px;">Fără serii înregistrate.</div>`;
+
+              return `
+                <div class="titan-day-ex-card">
+                  <div class="titan-day-ex-head">
+                    <div>
+                      ${info.muscle ? `<div class="titan-day-ex-muscle">${esc(info.muscle)}</div>` : ""}
+                      <div class="titan-day-ex-name">${esc(info.name)}</div>
+                    </div>
+                    <span style="font-size:11px;font-weight:700;color:#8E8E93;font-variant-numeric:tabular-nums;flex-shrink:0;">
+                      ${setsToRender.length} ${setsToRender.length === 1 ? "serie" : "serii"}
+                    </span>
+                  </div>
+                  <div class="titan-day-sets-grid">
+                    <div class="titan-day-set-head">
+                      <span>Set</span>
+                      <span>Greutate</span>
+                      <span>Repetări</span>
+                      <span style="text-align:right;">1RM est.</span>
+                    </div>
+                    ${rowsHTML}
+                  </div>
+                </div>
+              `;
+            })
+            .join("")
+        : `<div style="font-size:13px;color:#8E8E93;text-align:center;padding:16px 8px;">Niciun exercițiu înregistrat în această sesiune.</div>`;
+
+      const durationText = formatDayDetailDuration(workout);
+      const volFormatted = Math.round(totalVolumeKg).toLocaleString("ro-RO");
+
+      return `
+        <article class="titan-day-session-card">
+          <div class="titan-day-session-top">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+              <h2 class="titan-day-session-title">${esc(title)}</h2>
+              ${list.length > 1 ? `<span style="font-size:11px;font-weight:700;color:#FF7A40;background:rgba(255,77,0,0.12);padding:3px 9px;border-radius:999px;flex-shrink:0;">Sesiunea ${wIdx + 1}</span>` : ""}
+            </div>
+
+            <div class="titan-day-stats-grid">
+              <div class="titan-day-stat-box">
+                <span class="titan-day-stat-label">Durată</span>
+                <span class="titan-day-stat-val">${esc(durationText)}</span>
+              </div>
+              <div class="titan-day-stat-box">
+                <span class="titan-day-stat-label">Volum Total</span>
+                <span class="titan-day-stat-val" style="color:#FF4D00;">${volFormatted} <span style="font-size:13px;color:#A1A1AA;">kg</span></span>
+              </div>
+              <div class="titan-day-stat-box">
+                <span class="titan-day-stat-label">Serii Complete</span>
+                <span class="titan-day-stat-val">${totalSetsCount}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="titan-day-ex-list">
+            ${exercisesHTML}
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+
+  const overlay = document.createElement("div");
+  overlay.id = "titan-day-detail-overlay";
+  overlay.className = "titan-day-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", `Detalii antrenament ${fullDateLabel}`);
+
+  overlay.innerHTML = `
+    <header class="titan-day-header">
+      <button type="button" class="titan-day-back-btn" onclick="closeConsistencyDetailOverlay()">
+        <i data-lucide="arrow-left" style="width:16px;height:16px;stroke-width:2.2;"></i>
+        <span>Înapoi</span>
+      </button>
+      <div class="titan-day-header-date">
+        <i data-lucide="calendar" style="width:13px;height:13px;stroke-width:2;"></i>
+        <span>${esc(fullDateLabel)}</span>
+      </div>
+    </header>
+    <main class="titan-day-body">
+      <div class="titan-day-inner">
+        ${list.length > 1 ? `<div style="font-size:12px;font-weight:700;color:#A1A1AA;padding:0 4px;">${list.length} antrenamente înregistrate în această zi</div>` : ""}
+        ${sessionsHTML}
+      </div>
+    </main>
+  `;
+
+  document.body.appendChild(overlay);
+  document.body.style.overflow = "hidden";
+
+  if (typeof refreshLucideIcons === "function") {
+    refreshLucideIcons();
+  } else if (window.lucide) {
+    window.lucide.createIcons();
+  }
+};
+
+// Restaurare automată a lui openWorkoutDetailView dacă a fost ștearsă din greșeală (păstrează funcțional și tab-ul Istoric)
+if (typeof window.openWorkoutDetailView !== "function" && typeof openWorkoutDetailView !== "function") {
+  window.openWorkoutDetailView = function (input) {
+    if (!input) return;
+    const allWorkouts =
+      typeof state !== "undefined"
+        ? Array.isArray(state.workouts)
+          ? state.workouts
+          : Array.isArray(state.history)
+            ? state.history
+            : []
+        : [];
+
+    if (Array.isArray(input)) {
+      window.openConsistencyDayOverlay(input);
+      return;
+    }
+    if (typeof input === "object") {
+      window.openConsistencyDayOverlay([input]);
+      return;
+    }
+    const found =
+      allWorkouts.find((w) => w && String(w.id) === String(input)) ||
+      (typeof input === "number" ? allWorkouts[input] : null);
+    if (found) {
+      window.openConsistencyDayOverlay([found]);
+    }
+  };
+}
+
+// Închidere rapidă cu tasta Escape pe desktop
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && document.getElementById("titan-day-detail-overlay")) {
+    window.closeConsistencyDetailOverlay();
+  }
+});
+
+window.openConsistencyDayDetail = function (rawDateValue) {
+  const targetKey = getLocalDateKey(rawDateValue);
+  if (!targetKey) return;
+
+  const shortDate = formatConsistencyShortDate(targetKey);
+
+  // 1. Căutăm toate antrenamentele de forță din istoricul salvat pe exact acea dată locală
+  const allWorkouts =
+    typeof state !== "undefined"
+      ? Array.isArray(state.workouts)
+        ? state.workouts
+        : Array.isArray(state.history)
+          ? state.history
+          : []
+      : [];
+
+  const dayWorkouts = allWorkouts.filter((w) => {
+    if (!w) return false;
+    const wKey = getLocalDateKey(w.date || w.createdAt || w.timestamp);
+    return wKey === targetKey;
+  });
+
+  if (dayWorkouts.length > 0) {
+    window.openConsistencyDayOverlay(dayWorkouts, targetKey);
+    return;
+  }
+
+  // 2. Dacă nu există forță, verificăm curat dacă există activitate Cardio în acea zi
+  const allCardio =
+    typeof state !== "undefined"
+      ? Array.isArray(state.cardioLogs)
+        ? state.cardioLogs
+        : Array.isArray(state.cardioSessions)
+          ? state.cardioSessions
+          : Array.isArray(state.cardio)
+            ? state.cardio
+            : []
+      : [];
+
+  const dayCardio = allCardio.filter((c) => {
+    if (!c) return false;
+    const cKey = getLocalDateKey(c.date || c.createdAt || c.timestamp);
+    return cKey === targetKey;
+  });
+
+  if (dayCardio.length > 0) {
+    const totalMins = dayCardio.reduce((sum, c) => sum + (Number(c.duration || c.minutes || 0) || 0), 0);
+    const totalKm = dayCardio.reduce((sum, c) => sum + (Number(c.distance || c.km || 0) || 0), 0);
+    const details = [
+      totalMins > 0 ? `${Math.round(totalMins)} min` : "",
+      totalKm > 0 ? `${Math.round(totalKm * 10) / 10} km` : ""
+    ]
+      .filter(Boolean)
+      .join(" • ");
+
+    window.showConsistencyToast(
+      details ? `Cardio pe ${shortDate} • ${details}` : `Activitate cardio pe ${shortDate}`,
+      true
+    );
+    return;
+  }
+
+  // 3. Zi gri (fără antrenament) — toast discret, fără pagină goală
+  window.showConsistencyToast(`Zi de odihnă • Niciun antrenament pe ${shortDate}`, false);
+};
+
+  /* === MODIFICAREA #8: AUTO-DENUMIRE INTELIGENTĂ & WORKOUT-URI PROPUSE DIN ISTORIC === */
+
+function normalizeSmartText(str) {
+  return String(str || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getSmartExercisesCatalog() {
+  if (typeof state !== "undefined" && Array.isArray(state.exercises) && state.exercises.length) {
+    return state.exercises;
+  }
+  if (typeof INITIAL_EXERCISES !== "undefined" && Array.isArray(INITIAL_EXERCISES)) {
+    return INITIAL_EXERCISES;
+  }
+  return [];
+}
+
+function resolveCatalogExerciseForSmart(workoutEx) {
+  if (!workoutEx) return null;
+  const catalog = getSmartExercisesCatalog();
+
+  if (typeof workoutEx === "string") {
+    const key = normalizeSmartText(workoutEx);
+    return catalog.find((c) => normalizeSmartText(c.id) === key || normalizeSmartText(c.name) === key) || null;
+  }
+
+  const targetId = normalizeSmartText(workoutEx.exerciseId || workoutEx.id);
+  const targetName = normalizeSmartText(workoutEx.name || workoutEx.title);
+
+  return (
+    catalog.find(
+      (c) => (targetId && normalizeSmartText(c.id) === targetId) || (targetName && normalizeSmartText(c.name) === targetName)
+    ) || workoutEx
+  );
+}
+
+function classifyExerciseForSmartName(workoutEx) {
+  const ex = resolveCatalogExerciseForSmart(workoutEx);
+  if (!ex) return { bucket: "", isRearDelt: false };
+
+  const subRaw =
+    typeof getExerciseSubMuscle === "function"
+      ? getExerciseSubMuscle(ex)
+      : ex.subGroup || ex.primaryMuscle || "";
+  const sub = normalizeSmartText(subRaw);
+  const prim = normalizeSmartText(ex.primaryMuscle || ex.muscleGroup || "");
+  const nameText = normalizeSmartText(ex.name || ex.title || "");
+
+  // 1. Sub-grupe exacte (prioritate maximă — separă Biceps / Triceps / Deltoid Posterior / Core)
+  if (sub.includes("biceps") && !sub.includes("femural")) return { bucket: "biceps", isRearDelt: false };
+  if (sub.includes("triceps")) return { bucket: "triceps", isRearDelt: false };
+  if (sub.includes("antebrat") || sub.includes("forearm")) return { bucket: "forearms", isRearDelt: false };
+  if (sub.includes("abdomen") || sub.includes("core") || prim.includes("abdomen") || prim.includes("core")) {
+    return { bucket: "core", isRearDelt: false };
+  }
+  if (sub.includes("deltoid posterior") || sub.includes("rear")) {
+    return { bucket: "shoulders", isRearDelt: true };
+  }
+  if (sub.includes("deltoid") || sub.includes("umeri") || prim.includes("umeri") || prim.includes("shoulder")) {
+    return { bucket: "shoulders", isRearDelt: false };
+  }
+  if (sub.includes("piept") || prim.includes("piept") || prim.includes("chest")) {
+    return { bucket: "chest", isRearDelt: false };
+  }
+  if (
+    sub.includes("dorsal") ||
+    sub.includes("spate") ||
+    sub.includes("trapez") ||
+    sub.includes("lombar") ||
+    sub.includes("romboizi") ||
+    prim.includes("spate") ||
+    prim.includes("back")
+  ) {
+    return { bucket: "back", isRearDelt: false };
+  }
+  if (
+    sub.includes("cvadriceps") ||
+    sub.includes("ischiogamb") ||
+    sub.includes("femural") ||
+    sub.includes("fesier") ||
+    sub.includes("aductor") ||
+    sub.includes("gamb") ||
+    prim.includes("picioare") ||
+    prim.includes("leg")
+  ) {
+    return { bucket: "legs", isRearDelt: false };
+  }
+
+  // Fallback suplimentar pentru exerciții custom cu grupa „Brațe”
+  if (prim.includes("brate") || prim.includes("arm")) {
+    if (nameText.includes("triceps") || nameText.includes("pushdown") || nameText.includes("extensii") || nameText.includes("skull") || nameText.includes("dips")) {
+      return { bucket: "triceps", isRearDelt: false };
+    }
+    if (nameText.includes("antebrat") || nameText.includes("wrist")) {
+      return { bucket: "forearms", isRearDelt: false };
+    }
+    return { bucket: "biceps", isRearDelt: false };
+  }
+
+  return { bucket: "", isRearDelt: false };
+}
+
+function countWorkingSetsForSmartName(workoutEx) {
+  if (!workoutEx || !Array.isArray(workoutEx.sets) || workoutEx.sets.length === 0) {
+    return 1;
+  }
+  const completedValid = workoutEx.sets.filter((s) => {
+    if (!s) return false;
+    if (s.completed === false || s.done === false || s.checked === false) return false;
+    const r = parseInt(s.reps, 10);
+    return Number.isFinite(r) && r > 0;
+  }).length;
+
+  return completedValid > 0 ? completedValid : Math.max(1, workoutEx.sets.length);
+}
+
+// 1. Funcția principală de auto-denumire inteligentă
+function generateSmartWorkoutName(exercises) {
+  if (!Array.isArray(exercises) || exercises.length === 0) {
+    return "Custom Workout";
+  }
+
+  const counts = {
+    chest: 0,
+    back: 0,
+    legs: 0,
+    shoulders: 0,
+    biceps: 0,
+    triceps: 0,
+    forearms: 0,
+    core: 0
+  };
+  let nonRearShoulderSets = 0;
+
+  exercises.forEach((wEx) => {
+    if (!wEx) return;
+    const { bucket, isRearDelt } = classifyExerciseForSmartName(wEx);
+    if (!bucket || !(bucket in counts)) return;
+
+    const setWeight = countWorkingSetsForSmartName(wEx);
+    counts[bucket] += setWeight;
+    if (bucket === "shoulders" && !isRearDelt) {
+      nonRearShoulderSets += setWeight;
+    }
+  });
+
+  const allBuckets = Object.keys(counts).filter((k) => counts[k] > 0);
+  if (allBuckets.length === 0) return "Custom Workout";
+
+  const maxSets = Math.max(...allBuckets.map((k) => counts[k]));
+
+  // Ignoră grupele secundare cu o singură serie accidentală când există grupe principale clare (3+ serii)
+  let significant = allBuckets.filter((k) => {
+    if (maxSets >= 3 && counts[k] <= 1) return false;
+    return true;
+  });
+
+  if (significant.length === 0) significant = allBuckets;
+
+  // Ignoră accesoriile minore (Antebraț / Core) dacă există grupe majore clare și au maxim 2 serii de final
+  const majorGroups = ["chest", "back", "legs", "shoulders", "biceps", "triceps"];
+  const hasMajor = significant.some((k) => majorGroups.includes(k));
+  if (hasMajor) {
+    significant = significant.filter((k) => {
+      if (k === "forearms") return false;
+      if (k === "core" && maxSets >= 4 && counts.core <= 2) return false;
+      return true;
+    });
+  }
+
+  const has = (k) => significant.includes(k);
+  const hasChest = has("chest");
+  const hasBack = has("back");
+  const hasLegs = has("legs");
+  const hasShoulders = has("shoulders");
+  const hasBiceps = has("biceps");
+  const hasTriceps = has("triceps");
+  const hasCore = has("core");
+  const hasForearms = has("forearms");
+
+  const hasFrontOrSideShoulders = hasShoulders && nonRearShoulderSets > (maxSets >= 3 ? 1 : 0);
+
+  // A. O singură grupă principală
+  if (significant.length === 1) {
+    const singleMap = {
+      chest: "Chest Day",
+      back: "Back Day",
+      legs: "Leg Day",
+      shoulders: "Shoulders Day",
+      biceps: "Biceps Day",
+      triceps: "Triceps Day",
+      forearms: "Arms Day",
+      core: "Core Day"
+    };
+    return singleMap[significant[0]] || "Custom Workout";
+  }
+
+  // B. Combinații consacrate
+  // 1. Arms Day: Biceps + Triceps (fără Piept / Spate / Picioare / Umeri)
+  if (hasBiceps && hasTriceps && !hasChest && !hasBack && !hasLegs && !hasShoulders) {
+    return "Arms Day";
+  }
+
+  // 2. Push Day: Piept + Umeri + Triceps (fără Spate / Picioare / Biceps)
+  if (hasChest && hasShoulders && hasTriceps && !hasBack && !hasLegs && !hasBiceps) {
+    return "Push Day";
+  }
+
+  // 3. Pull Day: Spate + Biceps (+ eventual Deltoid Posterior, fără Piept / Picioare / Triceps / Umeri front-lateral)
+  if (hasBack && hasBiceps && !hasChest && !hasLegs && !hasTriceps && !hasFrontOrSideShoulders) {
+    return "Pull Day";
+  }
+
+  // 4. Upper Body Day: Piept + Spate (+ eventual Umeri / Brațe, fără Picioare)
+  if (hasChest && hasBack && !hasLegs) {
+    return "Upper Body Day";
+  }
+
+  // 5. Picioare + partea superioară:
+  //    - exact Picioare + Umeri -> Legs & Shoulders Day
+  //    - orice altă combinație Picioare + grupă superioară -> Full Body Day
+  const hasAnyUpper = hasChest || hasBack || hasShoulders || hasBiceps || hasTriceps;
+  if (hasLegs && hasAnyUpper) {
+    if (hasShoulders && !hasChest && !hasBack && !hasBiceps && !hasTriceps) {
+      return counts.shoulders > counts.legs ? "Shoulders & Legs Day" : "Legs & Shoulders Day";
+    }
+    return "Full Body Day";
+  }
+
+  // 6. Combinații cu ambele brațe + 1 grupă superioară (ex. Shoulders & Arms Day, Chest & Arms Day, Back & Arms Day)
+  if (hasBiceps && hasTriceps && !hasLegs) {
+    const armsSets = counts.biceps + counts.triceps;
+    if (hasShoulders && !hasChest && !hasBack) {
+      return armsSets > counts.shoulders ? "Arms & Shoulders Day" : "Shoulders & Arms Day";
+    }
+    if (hasChest && !hasBack && !hasShoulders) {
+      return armsSets > counts.chest ? "Arms & Chest Day" : "Chest & Arms Day";
+    }
+    if (hasBack && !hasChest && !hasShoulders) {
+      return armsSets > counts.back ? "Arms & Back Day" : "Back & Arms Day";
+    }
+  }
+
+  // C. Combinații de 2 grupe (sau top 2 grupe ordonate descrescător după numărul de serii)
+  const labelMap = {
+    chest: "Chest",
+    back: "Back",
+    legs: "Legs",
+    shoulders: "Shoulders",
+    biceps: "Biceps",
+    triceps: "Triceps",
+    core: "Core",
+    forearms: "Arms"
+  };
+
+  const priorityTieBreaker = {
+    legs: 8,
+    back: 7,
+    chest: 6,
+    shoulders: 5,
+    triceps: 4,
+    biceps: 3,
+    core: 2,
+    forearms: 1
+  };
+
+  const sorted = [...significant].sort((a, b) => {
+    if (counts[b] !== counts[a]) return counts[b] - counts[a];
+    return (priorityTieBreaker[b] || 0) - (priorityTieBreaker[a] || 0);
+  });
+
+  const first = labelMap[sorted[0]] || "Strength";
+  const second = labelMap[sorted[1]];
+  if (second && second !== first) {
+    return `${first} & ${second} Day`;
+  }
+  return `${first} Day`;
+}
+
+// 2. Generare dinamică de Workout-uri Propuse din istoric (fără duplicate, păstrând cea mai recentă variantă)
+function getSmartProposedWorkouts(maxItems = 8) {
+  const workouts =
+    typeof state !== "undefined"
+      ? Array.isArray(state.workouts)
+        ? state.workouts
+        : Array.isArray(state.history)
+          ? state.history
+          : []
+      : [];
+
+  if (!workouts.length) return [];
+
+  const catalog = getSmartExercisesCatalog();
+
+  // Sortăm descrescător după dată (cele mai recente primele)
+  const sortedWorkouts = [...workouts]
+    .map((w, idx) => {
+      const rawDate = w && (w.date || w.createdAt || w.timestamp);
+      const ts = typeof rawDate === "number" ? rawDate : Date.parse(rawDate) || idx;
+      return { workout: w, ts, rawDate };
+    })
+    .sort((a, b) => b.ts - a.ts);
+
+  const bySmartName = new Map();
+
+  for (const entry of sortedWorkouts) {
+    const w = entry.workout;
+    if (!w || !Array.isArray(w.exercises) || w.exercises.length === 0) continue;
+
+    // Rezolvăm exercițiile existente în catalog și eliminăm eventuale duplicate din aceeași sesiune
+    const seenExIds = new Set();
+    const cleanExercises = [];
+
+    w.exercises.forEach((wEx) => {
+      if (!wEx) return;
+      const catEx = resolveCatalogExerciseForSmart(wEx);
+      const matchedInCatalog =
+        catEx && catEx.id
+          ? catalog.find((c) => normalizeSmartText(c.id) === normalizeSmartText(catEx.id))
+          : null;
+
+      if (!matchedInCatalog) return;
+      if (seenExIds.has(matchedInCatalog.id)) return;
+      seenExIds.add(matchedInCatalog.id);
+
+      const setsCount = Array.isArray(wEx.sets) && wEx.sets.length > 0 ? Math.min(8, Math.max(1, wEx.sets.length)) : 3;
+      cleanExercises.push({
+        exerciseId: matchedInCatalog.id,
+        name: matchedInCatalog.name,
+        setsCount
+      });
+    });
+
+    if (cleanExercises.length === 0) continue;
+
+    const smartName = generateSmartWorkoutName(w.exercises);
+    if (!smartName || smartName === "Custom Workout") continue;
+
+    // Fără duplicate: păstrăm doar cea mai recentă versiune pentru fiecare nume inteligent
+    if (!bySmartName.has(smartName)) {
+      bySmartName.set(smartName, {
+        name: smartName,
+        exercises: cleanExercises,
+        lastDateRaw: entry.rawDate,
+        lastTimestamp: entry.ts
+      });
+    }
+
+    if (bySmartName.size >= maxItems) break;
+  }
+
+  return Array.from(bySmartName.values());
+}
+
+function formatSmartPropDate(rawDate) {
+  if (!rawDate) return "";
+  const d = new Date(rawDate);
+  if (Number.isNaN(d.getTime())) return "";
+  try {
+    return d.toLocaleDateString("ro-RO", { day: "numeric", month: "short" });
+  } catch (e) {
+    return "";
+  }
+}
+
+// 3. Randarea secțiunii „Workout-uri Propuse din Antrenamentele Tale” în TAB 3 (Workout)
+function renderSmartProposedWorkoutsHTML() {
+  const proposals = getSmartProposedWorkouts(8);
+  const esc = typeof escapeHtml === "function" ? escapeHtml : (s) => String(s || "");
+  const hasActiveExercises =
+    typeof state !== "undefined" && Array.isArray(state.activeExercises) && state.activeExercises.length > 0;
+
+  // Deschis implicit când antrenamentul e gol; restrâns discret când deja ridici în sală
+  const openAttr = !hasActiveExercises ? "open" : "";
+
+  const contentHTML = proposals.length
+    ? `
+      <div class="smart-prop-grid">
+        ${proposals
+          .map((prop) => {
+            const dateText = formatSmartPropDate(prop.lastDateRaw);
+            const exListHTML = prop.exercises
+              .map((ex) => esc(ex.name))
+              .join(`<span class="smart-prop-ex-sep">•</span>`);
+            const encodedName = encodeURIComponent(prop.name);
+
+            return `
+              <div class="smart-prop-card">
+                <div class="smart-prop-card-top">
+                  <div class="smart-prop-title-wrap">
+                    <h4 class="smart-prop-name">${esc(prop.name)}</h4>
+                    <div class="smart-prop-meta-row">
+                      <span class="smart-prop-count-badge">
+                        <i data-lucide="dumbbell" style="width:11px;height:11px;stroke-width:2.1;"></i>
+                        ${prop.exercises.length} ${prop.exercises.length === 1 ? "exercițiu" : "exerciții"}
+                      </span>
+                      ${
+                        dateText
+                          ? `<span class="smart-prop-date">
+                               <i data-lucide="calendar" style="width:11px;height:11px;stroke-width:2;"></i>
+                               Ultima: ${esc(dateText)}
+                             </span>`
+                          : ""
+                      }
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="smart-prop-start-btn"
+                    onclick="startSmartProposedWorkout('${encodedName}')"
+                    title="Pornește ${esc(prop.name)}"
+                  >
+                    <i data-lucide="play" style="width:12px;height:12px;fill:currentColor;stroke-width:2;"></i>
+                    <span>Începe</span>
+                  </button>
+                </div>
+                <div class="smart-prop-ex-list" title="${esc(prop.exercises.map((e) => e.name).join(" • "))}">
+                  ${exListHTML}
+                </div>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `
+    : `
+      <div class="smart-prop-empty">
+        Finalizează primul antrenament și TITANLIFT îți va genera automat aici rutine personalizate (ex. <strong style="color:#F5F5F7;">Push Day</strong>, <strong style="color:#F5F5F7;">Chest &amp; Biceps Day</strong>) gata de pornit dintr-un singur click.
+      </div>
+    `;
+
+  return `
+    <details ${openAttr} class="smart-prop-section">
+      <summary class="smart-prop-summary">
+        <div class="smart-prop-summary-left">
+          <div class="smart-prop-icon-wrap">
+            <i data-lucide="sparkles" style="width:16px;height:16px;stroke-width:2;"></i>
+          </div>
+          <div style="min-width:0;">
+            <div class="smart-prop-heading">
+              Workout-uri Propuse din Antrenamentele Tale${proposals.length ? ` (${proposals.length})` : ""}
+            </div>
+            <div class="smart-prop-sub">
+              Generate automat din istoricul tău • Cele mai recente variante unice
+            </div>
+          </div>
+        </div>
+        <i data-lucide="chevron-down" class="w-4 h-4 smart-prop-chevron"></i>
+      </summary>
+      ${contentHTML}
+    </details>
+  `;
+}
+
+// 4. Pornirea rapidă a unui workout propus (preîncărcat curat cu barele de Best Set & Țintă PR)
+window.startSmartProposedWorkout = function (encodedSmartName) {
+  if (typeof state === "undefined") return;
+  const smartName = decodeURIComponent(String(encodedSmartName || ""));
+  const proposals = getSmartProposedWorkouts(8);
+  const proposal = proposals.find((p) => p.name === smartName);
+  if (!proposal || !proposal.exercises.length) return;
+
+  if (Array.isArray(state.activeExercises) && state.activeExercises.length > 0) {
+    const ok = window.confirm(
+      `Ai deja ${state.activeExercises.length} exerciții în antrenamentul activ. Vrei să le înlocuiești cu „${proposal.name}”?`
+    );
+    if (!ok) return;
+  }
+
+  // Detectăm cheia nativă a seriilor (weight vs kg, completed vs done) ca să rămână 100% compatibilă
+  const sampleSet =
+    (Array.isArray(state.workouts) &&
+      state.workouts[0] &&
+      Array.isArray(state.workouts[0].exercises) &&
+      state.workouts[0].exercises[0] &&
+      Array.isArray(state.workouts[0].exercises[0].sets) &&
+      state.workouts[0].exercises[0].sets[0]) ||
+    null;
+
+  const usesKgKey = Boolean(sampleSet && "kg" in sampleSet && !("weight" in sampleSet));
+  const nowBase = Date.now();
+
+  state.activeExercises = proposal.exercises.map((exItem, idx) => {
+    const sets = [];
+    for (let s = 0; s < exItem.setsCount; s++) {
+      const setObj = {
+        id: `set-${nowBase}-${idx}-${s}`,
+        reps: "",
+        completed: false
+      };
+      if (usesKgKey) {
+        setObj.kg = "";
+      } else {
+        setObj.weight = "";
+      }
+      sets.push(setObj);
+    }
+
+    return {
+      id: `ae-${nowBase}-${idx}`,
+      exerciseId: exItem.exerciseId,
+      sets
+    };
+  });
+
+  // Setăm numele sesiunii dacă există un câmp de nume în state
+  if ("workoutName" in state) state.workoutName = proposal.name;
+  if ("activeWorkoutName" in state) state.activeWorkoutName = proposal.name;
+  if ("currentWorkoutName" in state) state.currentWorkoutName = proposal.name;
+  state.activeTab = "tracker";
+
+  if (typeof persistAllState === "function") persistAllState();
+  if (typeof renderApp === "function") renderApp();
+
+  if (typeof showToast === "function") {
+    showToast(`Antrenament încărcat: ${proposal.name}`, "success");
+  } else if (typeof window.showConsistencyToast === "function") {
+    window.showConsistencyToast(`Antrenament încărcat: ${proposal.name}`, true);
+  }
+};
+
+// 5. Auto-denumire inteligentă la salvarea oricărui antrenament (dacă nu are un nume custom)
+function isGenericDefaultWorkoutName(rawName) {
+  const norm = normalizeSmartText(rawName);
+  if (!norm) return true;
+  const genericList = [
+    "antrenament",
+    "antrenament forta",
+    "antrenament de forta",
+    "antrenament nou",
+    "antrenament titanlift",
+    "sesiune",
+    "sesiune forta",
+    "sesiune de forta",
+    "sesiune antrenament",
+    "sesiune de antrenament",
+    "workout",
+    "strength workout",
+    "new workout",
+    "titanlift workout",
+    "custom workout"
+  ];
+  if (genericList.includes(norm)) return true;
+  if (/^(antrenament|sesiune|workout)\s*[-•:#]?\s*(\d{1,2}[./-]\d{1,2}|#\d+)/.test(norm)) return true;
+  return false;
+}
+
+(function hookSmartWorkoutAutoNaming() {
+  if (typeof window.saveActiveWorkout !== "function" || window.saveActiveWorkout.__titanSmartNameWrapped) {
+    return;
+  }
+
+  const origSave = window.saveActiveWorkout;
+  const wrappedSave = function (...args) {
+    const prevWorkouts =
+      typeof state !== "undefined" && Array.isArray(state.workouts) ? state.workouts : [];
+    const prevIds = new Set(prevWorkouts.map((w) => (w && w.id !== undefined ? String(w.id) : "")));
+    const prevCount = prevWorkouts.length;
+
+    const snapshotActive =
+      typeof state !== "undefined" && Array.isArray(state.activeExercises)
+        ? state.activeExercises.map((it) => ({
+            ...it,
+            sets: Array.isArray(it.sets) ? it.sets.map((s) => ({ ...s })) : []
+          }))
+        : [];
+
+    const computedSmartName = generateSmartWorkoutName(snapshotActive);
+    const result = origSave.apply(this, args);
+
+    const applySmartNameIfNeeded = () => {
+      if (typeof state === "undefined" || !Array.isArray(state.workouts)) return;
+      if (state.workouts.length <= prevCount) return;
+
+      // Găsim antrenamentul tocmai adăugat (indiferent dacă a fost inserat cu unshift la început sau push la final)
+      let newest = state.workouts.find((w) => w && w.id !== undefined && !prevIds.has(String(w.id)));
+      if (!newest) newest = state.workouts[0];
+      if (!newest) return;
+
+      const finalSmartName =
+        computedSmartName && computedSmartName !== "Custom Workout"
+          ? computedSmartName
+          : generateSmartWorkoutName(newest.exercises);
+
+      if (!finalSmartName || finalSmartName === "Custom Workout") return;
+
+      let changed = false;
+      if (isGenericDefaultWorkoutName(newest.name)) {
+        newest.name = finalSmartName;
+        changed = true;
+      }
+      if ("title" in newest && isGenericDefaultWorkoutName(newest.title)) {
+        newest.title = finalSmartName;
+        changed = true;
+      }
+
+      if (changed) {
+        if (typeof persistAllState === "function") persistAllState();
+        if (typeof renderApp === "function") renderApp();
+      }
+    };
+
+    if (result && typeof result.then === "function") {
+      result.then(() => applySmartNameIfNeeded());
+    } else {
+      applySmartNameIfNeeded();
+    }
+
+    return result;
+  };
+
+  wrappedSave.__titanSmartNameWrapped = true;
+  window.saveActiveWorkout = wrappedSave;
 })();
 
   </script>

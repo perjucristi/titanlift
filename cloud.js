@@ -1,5 +1,5 @@
 // ============================================================================
-// TITANLIFT — CLOUD AUTH, REAL-TIME SYNC (FIREBASE) & SIGNUP EMAIL ALERTS
+// TITANLIFT — CLOUD AUTH, REAL-TIME SYNC (FIREBASE), ANTI-WIPE & TITAN DUEL
 // ============================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {
@@ -16,10 +16,18 @@ import {
   doc,
   getDoc,
   setDoc,
-  onSnapshot
+  deleteDoc,
+  onSnapshot,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-// 1. CHEIA TA WEB3FORMS (înlocuiește textul dintre ghilimele cu cheia primită pe email)
+// Versiunea aplicației (schimbă în "v14", "v15" etc. când urci update-uri noi pentru prieteni)
+const APP_VERSION = "v13";
+
+// 1. CHEIA TA WEB3FORMS
 const WEB3FORMS_ACCESS_KEY = "47759895-a288-43e1-966b-6fc18db97d7d";
 
 // 2. CONFIGURAREA TA FIREBASE
@@ -40,6 +48,7 @@ const db = getFirestore(app);
 const META_UID_KEY = "titan_cloud_uid";
 const META_UPDATED_KEY = "titan_cloud_updatedAt";
 const META_HASH_KEY = "titan_cloud_hash";
+const META_VERSION_KEY = "titan_cloud_seen_version";
 
 const origSetItem = Storage.prototype.setItem;
 const origRemoveItem = Storage.prototype.removeItem;
@@ -50,6 +59,7 @@ let unsubscribeSnapshot = null;
 let isApplyingCloud = false;
 let pushTimer = null;
 let isSyncingNow = false;
+let initialSyncDone = false;
 
 function isInternalKey(key) {
   return !key || key.startsWith("titan_cloud_") || key.startsWith("firebase:");
@@ -64,6 +74,34 @@ function getAppStorageSnapshot() {
     }
   }
   return data;
+}
+
+// Verifică dacă un snapshot conține antrenamente reale (Protecție Anti-Wipe)
+function snapshotHasWorkouts(storageObj) {
+  if (!storageObj || typeof storageObj !== "object") return false;
+  try {
+    if (storageObj.titanlift_public_stats) {
+      const ps = JSON.parse(storageObj.titanlift_public_stats);
+      if (Number(ps?.totalSessions || 0) > 0) return true;
+    }
+  } catch {}
+
+  for (const [k, v] of Object.entries(storageObj)) {
+    if (typeof v !== "string" || v.length < 4) continue;
+    const kl = k.toLowerCase();
+    if (kl.includes("workout") || kl.includes("history") || kl.includes("session") || kl.includes("state") || kl.includes("data")) {
+      try {
+        const parsed = JSON.parse(v);
+        if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === "object") return true;
+        if (parsed && typeof parsed === "object") {
+          if (Array.isArray(parsed.workouts) && parsed.workouts.length > 0) return true;
+          if (Array.isArray(parsed.history) && parsed.history.length > 0) return true;
+          if (Array.isArray(parsed.sessions) && parsed.sessions.length > 0) return true;
+        }
+      } catch {}
+    }
+  }
+  return false;
 }
 
 function computeSnapshotHash(obj) {
@@ -118,7 +156,7 @@ function safeReloadOnce() {
 }
 
 // ============================================================================
-// 3. INTERCEPTARE AUTOMATĂ A SALVĂRILOR DIN APLICAȚIE (OFFLINE-FIRST)
+// 3. INTERCEPTARE AUTOMATĂ A SALVĂRILOR DIN APLICAȚIE (OFFLINE-FIRST + ANTI-WIPE)
 // ============================================================================
 function markLocalDirtyAndSchedulePush() {
   const snapshot = getAppStorageSnapshot();
@@ -130,7 +168,8 @@ function markLocalDirtyAndSchedulePush() {
   origSetItem.call(window.localStorage, META_UPDATED_KEY, String(now));
   origSetItem.call(window.localStorage, META_HASH_KEY, hash);
 
-  if (currentUser) {
+  // Nu urcăm nimic în Cloud înainte să se termine verificarea inițială (Anti-Wipe)
+  if (currentUser && initialSyncDone) {
     scheduleCloudPush();
   }
 }
@@ -161,7 +200,7 @@ Storage.prototype.clear = function () {
 };
 
 function scheduleCloudPush() {
-  if (!currentUser) return;
+  if (!currentUser || !initialSyncDone) return;
   updatePillStatus("syncing");
   if (pushTimer) clearTimeout(pushTimer);
   pushTimer = setTimeout(() => {
@@ -194,6 +233,7 @@ async function pushLocalToCloud(user) {
       },
       { merge: true }
     );
+    await syncPublicProfileToCloud(user);
     updatePillStatus("synced");
   } catch (err) {
     console.warn("TitanLift Cloud push error:", err);
@@ -203,9 +243,8 @@ async function pushLocalToCloud(user) {
   }
 }
 
-// Trimite imediat modificările dacă utilizatorul închide/schimbă tab-ul
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden" && pushTimer && currentUser) {
+  if (document.visibilityState === "hidden" && pushTimer && currentUser && initialSyncDone) {
     clearTimeout(pushTimer);
     pushTimer = null;
     pushLocalToCloud(currentUser);
@@ -248,9 +287,10 @@ async function notifyOwnerOfNewUser(userEmail, userName) {
 }
 
 // ============================================================================
-// 5. SINCRONIZARE LA LOGARE & ASCULTARE ÎN TIMP REAL (ONSNAPSHOT)
+// 5. SINCRONIZARE LA LOGARE & ASCULTARE ÎN TIMP REAL (CU PROTECȚIE ANTI-WIPE)
 // ============================================================================
 async function startRealtimeSync(user) {
+  initialSyncDone = false;
   const userRef = doc(db, "users", user.uid);
   const lastUid = window.localStorage.getItem(META_UID_KEY);
   const localSnapshot = getAppStorageSnapshot();
@@ -263,7 +303,7 @@ async function startRealtimeSync(user) {
     const snap = await getDoc(userRef);
 
     if (!snap.exists()) {
-      // Cont nou-nouț: urcăm automat progresul existent de pe acest dispozitiv
+      initialSyncDone = true;
       await pushLocalToCloud(user);
     } else {
       const cloud = snap.data() || {};
@@ -272,28 +312,40 @@ async function startRealtimeSync(user) {
       const cloudHash = cloud.storageHash || computeSnapshotHash(cloudStorage);
 
       const isDifferentAccountOnThisDevice = lastUid !== user.uid;
+      const cloudHasData = snapshotHasWorkouts(cloudStorage);
+      const localHasData = snapshotHasWorkouts(localSnapshot);
 
-      if (isDifferentAccountOnThisDevice || (cloudUpdatedAt > localUpdatedAt && cloudHash !== localHash)) {
-        // Datele din Cloud sunt mai noi sau e prima conectare pe acest dispozitiv -> le descărcăm
+      // PROTECȚIE ANTI-WIPE: dacă Cloud-ul are antrenamente și dispozitivul curent e gol (ex: Go Live),
+      // descărcăm ÎNTOTDEAUNA din Cloud și nu suprascriem niciodată cu gol!
+      const protectFromEmptyOverwrite = cloudHasData && !localHasData;
+
+      if (
+        protectFromEmptyOverwrite ||
+        isDifferentAccountOnThisDevice ||
+        (cloudUpdatedAt > localUpdatedAt && cloudHash !== localHash)
+      ) {
         applyCloudSnapshotToLocal(cloudStorage, cloudUpdatedAt || Date.now(), user.uid, cloudHash);
+        initialSyncDone = true;
         showCloudToast("Progres sincronizat din Cloud! Se actualizează...");
         setTimeout(safeReloadOnce, 450);
         return;
       } else if (localUpdatedAt > cloudUpdatedAt && localHash !== cloudHash) {
-        // Ai făcut antrenament offline pe acest dispozitiv -> îl urcăm în Cloud
+        initialSyncDone = true;
         await pushLocalToCloud(user);
       } else {
         origSetItem.call(window.localStorage, META_UID_KEY, user.uid);
         origSetItem.call(window.localStorage, META_HASH_KEY, localHash);
+        initialSyncDone = true;
+        await syncPublicProfileToCloud(user);
         updatePillStatus("synced");
       }
     }
   } catch (err) {
     console.warn("TitanLift Cloud initial sync error:", err);
+    initialSyncDone = true;
     updatePillStatus("offline");
   }
 
-  // Ascultăm live modificările făcute de pe celălalt dispozitiv (ex: telefon -> laptop)
   if (unsubscribeSnapshot) unsubscribeSnapshot();
   unsubscribeSnapshot = onSnapshot(
     userRef,
@@ -332,7 +384,9 @@ onAuthStateChanged(auth, (user) => {
     renderModalContent();
     closeCloudModal();
     startRealtimeSync(user);
+    checkPendingFriendInvite();
   } else {
+    initialSyncDone = false;
     if (unsubscribeSnapshot) {
       unsubscribeSnapshot();
       unsubscribeSnapshot = null;
@@ -360,17 +414,17 @@ function translateAuthError(code) {
 }
 
 // ============================================================================
-// 7. INTERFAȚĂ STEALTH OLED (BUTON PLUTITOR + MODAL LOGIN / CONT)
+// 7. INTERFAȚĂ STEALTH OLED (BARĂ PLUTITOARE CLOUD + DUEL + MODAL LOGIN)
 // ============================================================================
-let authTab = "login"; // "login" | "register"
-let pillStatus = "idle"; // "idle" | "syncing" | "synced" | "offline"
+let authTab = "login";
+let pillStatus = "idle";
 
 function injectCloudStyles() {
   if (document.getElementById("titan-cloud-styles")) return;
   const style = document.createElement("style");
   style.id = "titan-cloud-styles";
   style.textContent = `
-    #titan-cloud-pill {
+    #titan-floating-bar {
       position: fixed;
       right: 16px;
       bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -378,6 +432,12 @@ function injectCloudStyles() {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+    }
+    #titan-cloud-pill,
+    #titan-duel-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
       padding: 9px 14px;
       border-radius: 999px;
       background: rgba(17, 17, 20, 0.92);
@@ -392,12 +452,18 @@ function injectCloudStyles() {
       cursor: pointer;
       transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     }
-    #titan-cloud-pill:hover {
-      border-color: rgba(255, 77, 0, 0.55);
+    #titan-duel-pill {
+      border-color: rgba(255, 77, 0, 0.45);
+      background: linear-gradient(180deg, rgba(255, 77, 0, 0.22) 0%, rgba(17, 17, 20, 0.94) 100%);
+    }
+    #titan-cloud-pill:hover,
+    #titan-duel-pill:hover {
+      border-color: rgba(255, 77, 0, 0.75);
       transform: translateY(-2px);
     }
-    #titan-cloud-pill:active {
-      transform: scale(0.97);
+    #titan-cloud-pill:active,
+    #titan-duel-pill:active {
+      transform: scale(0.96);
     }
     .tc-dot {
       width: 8px;
@@ -593,21 +659,22 @@ function injectCloudStyles() {
       position: fixed;
       left: 50%;
       top: 18px;
-      transform: translateX(-50%) translateY(-120%);
-      z-index: 10000;
+      transform: translateX(-50%) translateY(-130%);
+      z-index: 10005;
       background: #18181C;
       color: #F5F5F7;
-      border: 1px solid rgba(255, 77, 0, 0.5);
+      border: 1px solid rgba(255, 77, 0, 0.55);
       border-radius: 999px;
       padding: 10px 16px;
       font-family: "Plus Jakarta Sans", system-ui, sans-serif;
       font-size: 12px;
       font-weight: 600;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
       display: flex;
       align-items: center;
       gap: 10px;
       transition: transform 0.25s ease;
+      max-width: 92vw;
     }
     #titan-cloud-toast.show { transform: translateX(-50%) translateY(0); }
     #titan-cloud-toast button {
@@ -619,6 +686,43 @@ function injectCloudStyles() {
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Banner notificare update nou pentru prieteni */
+    #titan-update-banner {
+      position: fixed;
+      top: calc(14px + env(safe-area-inset-top, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(-140%);
+      z-index: 10004;
+      width: min(92vw, 420px);
+      background: linear-gradient(135deg, #18181C 0%, #111114 100%);
+      border: 1px solid rgba(255, 77, 0, 0.6);
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 24px rgba(255, 77, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      color: #F5F5F7;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #titan-update-banner.show { transform: translateX(-50%) translateY(0); }
+    .tub-text { font-size: 12px; line-height: 1.35; }
+    .tub-title { font-weight: 800; color: #FF6B00; font-size: 13px; margin-bottom: 2px; }
+    .tub-btn {
+      background: #FF4D00;
+      color: #FFF;
+      border: none;
+      border-radius: 10px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
     }
   `;
   document.head.appendChild(style);
@@ -657,13 +761,31 @@ function updatePillStatus(status) {
 }
 
 function renderPill() {
+  let bar = document.getElementById("titan-floating-bar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "titan-floating-bar";
+    document.body.appendChild(bar);
+  }
+
+  let duelPill = document.getElementById("titan-duel-pill");
+  if (!duelPill) {
+    duelPill = document.createElement("button");
+    duelPill.id = "titan-duel-pill";
+    duelPill.type = "button";
+    duelPill.textContent = "⚔️ Duel";
+    duelPill.onclick = () => openDuelModal();
+    bar.appendChild(duelPill);
+  }
+  duelPill.style.display = currentUser ? "inline-flex" : "none";
+
   let pill = document.getElementById("titan-cloud-pill");
   if (!pill) {
     pill = document.createElement("button");
     pill.id = "titan-cloud-pill";
     pill.type = "button";
     pill.onclick = openCloudModal;
-    document.body.appendChild(pill);
+    bar.appendChild(pill);
   }
 
   pill.textContent = "";
@@ -677,7 +799,7 @@ function renderPill() {
     const shortName = currentUser.displayName || (currentUser.email || "").split("@")[0] || "Cont";
     if (pillStatus === "syncing") {
       dot.className = "tc-dot tc-dot-amber";
-      label.textContent = `${shortName} • Sincronizare...`;
+      label.textContent = `${shortName} • Sync...`;
     } else if (pillStatus === "offline") {
       dot.className = "tc-dot tc-dot-red";
       label.textContent = `${shortName} • Offline`;
@@ -696,6 +818,7 @@ function ensureModalExists() {
   if (!overlay) {
     overlay = document.createElement("div");
     overlay.id = "titan-cloud-overlay";
+    overlay.setAttribute("role", "dialog");
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeCloudModal();
     });
@@ -742,6 +865,7 @@ function renderModalContent() {
         <div class="tc-user-email" id="tc-user-email-val"></div>
         <div class="tc-user-sub">Sincronizare Telefon ↔ Laptop activă • Ultima salvare: ${lastStr}</div>
       </div>
+      <button type="button" class="tc-btn-primary" id="tc-open-duel-btn">⚔️ Titan Squad & Duel Prieteni</button>
       <button type="button" class="tc-btn-secondary" id="tc-force-sync">↻ Sincronizează acum</button>
       <button type="button" class="tc-btn-danger" id="tc-logout-btn">Deconectare de pe acest dispozitiv</button>
       <div id="tc-msg" class="tc-msg"></div>
@@ -749,6 +873,10 @@ function renderModalContent() {
 
     card.querySelector("#tc-user-email-val").textContent = currentUser.email || "";
     card.querySelector("#tc-close-btn").onclick = closeCloudModal;
+    card.querySelector("#tc-open-duel-btn").onclick = () => {
+      closeCloudModal();
+      openDuelModal();
+    };
 
     card.querySelector("#tc-force-sync").onclick = async () => {
       await pushLocalToCloud(currentUser);
@@ -760,7 +888,9 @@ function renderModalContent() {
         clearTimeout(pushTimer);
         pushTimer = null;
       }
-      await pushLocalToCloud(currentUser);
+      if (initialSyncDone) {
+        await pushLocalToCloud(currentUser);
+      }
       if (unsubscribeSnapshot) {
         unsubscribeSnapshot();
         unsubscribeSnapshot = null;
@@ -847,7 +977,6 @@ function renderModalContent() {
         if (name) {
           await updateProfile(cred.user, { displayName: name });
         }
-        // Trimitem notificarea pe emailul tău personal (în fundal)
         notifyOwnerOfNewUser(email, name);
         setModalMessage("Cont creat! Progresul tău se sincronizează în Cloud...", false);
         setTimeout(closeCloudModal, 1100);
@@ -863,10 +992,50 @@ function renderModalContent() {
   };
 }
 
-// Pornire automată a interfeței Cloud
+// ============================================================================
+// 7B. NOTIFICARE AUTOMATĂ DE UPDATE PENTRU PRIETENI
+// ============================================================================
+function checkAppUpdateNotification() {
+  const seen = window.localStorage.getItem(META_VERSION_KEY);
+  if (!seen) {
+    origSetItem.call(window.localStorage, META_VERSION_KEY, APP_VERSION);
+  } else if (seen !== APP_VERSION) {
+    origSetItem.call(window.localStorage, META_VERSION_KEY, APP_VERSION);
+    setTimeout(() => {
+      let banner = document.getElementById("titan-update-banner");
+      if (!banner) {
+        banner = document.createElement("div");
+        banner.id = "titan-update-banner";
+        banner.innerHTML = `
+          <div class="tub-text">
+            <div class="tub-title">🚀 TitanLift a fost actualizat!</div>
+            <div>Aplicația a primit un update nou și rulează acum cea mai recentă versiune.</div>
+          </div>
+          <button type="button" class="tub-btn" id="tub-ok">Super ✓</button>
+        `;
+        document.body.appendChild(banner);
+        banner.querySelector("#tub-ok").onclick = () => banner.classList.remove("show");
+      }
+      requestAnimationFrame(() => banner.classList.add("show"));
+      setTimeout(() => banner.classList.remove("show"), 9000);
+    }, 1000);
+  }
+
+  // Detectare live dacă un update nou a fost publicat cât timp aplicația e deja deschisă
+  if ("serviceWorker" in navigator) {
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      showCloudToast("Update nou TitanLift disponibil!", true);
+    });
+  }
+}
+
 function initCloudUI() {
   injectCloudStyles();
   renderPill();
+  checkAppUpdateNotification();
 }
 
 if (document.readyState === "loading") {
@@ -898,7 +1067,6 @@ if (document.readyState === "loading") {
       }
 
       @media (max-width: 768px) {
-        /* Bara de navigare stă curat și nativ jos, lipită de marginea ecranului */
         [data-titan-bottom-nav="true"] {
           height: auto !important;
           padding-top: 8px !important;
@@ -906,25 +1074,26 @@ if (document.readyState === "loading") {
           z-index: 9985 !important;
         }
 
-        /* Pastila Cloud discretă, plutind curat chiar deasupra barei de navigare */
-        #titan-cloud-pill {
+        #titan-floating-bar {
           right: 12px !important;
           left: auto !important;
           bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
-          padding: 6px 11px !important;
-          font-size: 11px !important;
           gap: 6px !important;
-          background: rgba(17, 17, 20, 0.84) !important;
           z-index: 9980 !important;
         }
 
-        /* Spațiu suficient jos ca ultimul card să poată fi derulat complet deasupra barei */
+        #titan-cloud-pill,
+        #titan-duel-pill {
+          padding: 6px 11px !important;
+          font-size: 11px !important;
+          gap: 5px !important;
+        }
+
         body {
           padding-bottom: 130px !important;
         }
       }
 
-      /* Pregătire invizibilă pentru pagina nouă (zero flash chiar dacă main e recreat) */
       html.tc-swipe-prep-next main,
       html.tc-swipe-prep-next [data-titan-swipe-target="true"] {
         opacity: 0 !important;
@@ -940,7 +1109,6 @@ if (document.readyState === "loading") {
         will-change: transform, opacity;
       }
 
-      /* Intrare fluidă iOS-style în poziția finală */
       html.tc-swipe-enter main,
       html.tc-swipe-enter [data-titan-swipe-target="true"] {
         opacity: 1 !important;
@@ -959,7 +1127,7 @@ if (document.readyState === "loading") {
 
     const candidates = document.querySelectorAll("nav, footer, div");
     for (const el of candidates) {
-      if (el.id === "titan-cloud-overlay" || el.id === "titan-cloud-pill") continue;
+      if (el.id === "titan-cloud-overlay" || el.id === "titan-floating-bar" || el.id === "titan-duel-overlay") continue;
       const cs = window.getComputedStyle(el);
       if (cs.position !== "fixed") continue;
 
@@ -984,7 +1152,6 @@ if (document.readyState === "loading") {
     const nav = findMobileBottomNav();
     if (!nav) return [];
 
-    // Păstrăm doar butoanele reale vizibile (fără duplicate imbricate) și le ordonăm stânga -> dreapta
     const raw = Array.from(nav.querySelectorAll("button, [data-tab]"));
     const filtered = raw.filter((el) => {
       if (raw.some((other) => other !== el && other.contains(el))) return false;
@@ -1015,7 +1182,6 @@ if (document.readyState === "loading") {
     const b = Number(m[3]);
     const a = m[4] !== undefined ? Number(m[4]) : 1;
     if (a < 0.25) return false;
-    // Detectează portocaliul activ (#FF4D00 și variații), excluzând griul și albul
     return r >= 195 && g >= 30 && g <= 145 && b <= 75 && r - b >= 130;
   }
 
@@ -1035,7 +1201,6 @@ if (document.readyState === "loading") {
         score += 100;
       }
 
-      // Verificăm clasele reale ale butonului, IGNORÂND variantele hover:/focus:/active:
       const tokens = Array.from(btn.classList || []);
       for (const token of tokens) {
         if (token.includes(":")) continue;
@@ -1053,7 +1218,6 @@ if (document.readyState === "loading") {
         }
       }
 
-      // Verificăm culoarea reală randată pe ecran (iconiță, text, bară indicator portocalie)
       const btnCs = window.getComputedStyle(btn);
       if (isOrangeColor(btnCs.color)) score += 35;
 
@@ -1099,9 +1263,12 @@ if (document.readyState === "loading") {
     const cloudOverlay = document.getElementById("titan-cloud-overlay");
     if (cloudOverlay && cloudOverlay.classList.contains("open")) return true;
 
+    const duelOverlay = document.getElementById("titan-duel-overlay");
+    if (duelOverlay && duelOverlay.classList.contains("open")) return true;
+
     const dialogs = document.querySelectorAll('[role="dialog"], .fixed.inset-0');
     for (const d of dialogs) {
-      if (d.id === "titan-cloud-overlay") continue;
+      if (d.id === "titan-cloud-overlay" || d.id === "titan-duel-overlay") continue;
       const cs = window.getComputedStyle(d);
       if (
         cs.display !== "none" &&
@@ -1138,7 +1305,6 @@ if (document.readyState === "loading") {
     const html = document.documentElement;
     const exitX = direction === "next" ? -56 : 56;
 
-    // Faza 1: Pagina curentă alunecă curat afară în direcția degetului
     if (target) {
       target.style.transition =
         "transform 130ms cubic-bezier(0.4, 0, 1, 1), opacity 115ms ease-out";
@@ -1147,19 +1313,16 @@ if (document.readyState === "loading") {
     }
 
     setTimeout(() => {
-      // Pregătim pagina nouă invizibilă pe partea opusă (fără niciun flash)
       const prepClass = direction === "next" ? "tc-swipe-prep-next" : "tc-swipe-prep-prev";
       html.classList.remove("tc-swipe-enter", "tc-swipe-prep-next", "tc-swipe-prep-prev");
       html.classList.add(prepClass);
 
       resetTargetInlineStyles(target);
 
-      // Schimbăm efectiv tab-ul și resetăm poziția de scroll
       lastActiveTabIndex = nextIndex;
       buttons[nextIndex].click();
       window.scrollTo(0, 0);
 
-      // Faza 2: Pe următorul cadru randat, pagina nouă glisează lin în centru
       requestAnimationFrame(() => {
         const freshTarget = getSwipeTarget();
         if (freshTarget) void freshTarget.offsetWidth;
@@ -1182,13 +1345,12 @@ if (document.readyState === "loading") {
     let startY = 0;
     let startTime = 0;
     let currentDx = 0;
-    let axisLock = null; // null | "h" | "v"
+    let axisLock = null;
     let tracking = false;
     let activeButtons = [];
     let startTabIndex = 0;
     let swipeTarget = null;
 
-    // Reținem și click-urile manuale pe tab-uri
     document.addEventListener(
       "click",
       (e) => {
@@ -1220,7 +1382,7 @@ if (document.readyState === "loading") {
         if (
           !target ||
           target.closest(
-            "input, textarea, select, [contenteditable='true'], [data-titan-bottom-nav='true'], #titan-cloud-pill"
+            "input, textarea, select, [contenteditable='true'], [data-titan-bottom-nav='true'], #titan-floating-bar"
           )
         ) {
           return;
@@ -1228,7 +1390,6 @@ if (document.readyState === "loading") {
         if (isInsideHorizontalScrollable(target)) return;
 
         const touch = e.touches[0];
-        // Lăsăm marginile extreme libere pentru gestul nativ Back al iOS
         if (touch.clientX < 16 || touch.clientX > window.innerWidth - 16) return;
 
         activeButtons = getMobileTabButtons();
@@ -1281,13 +1442,11 @@ if (document.readyState === "loading") {
             swipeTarget.style.transition = "none";
 
             if (canMove) {
-              // Pagina urmează fin degetul
               const dragX = Math.max(-115, Math.min(115, dx * 0.45));
               const opacity = Math.max(0.58, 1 - Math.abs(dragX) / 260);
               swipeTarget.style.transform = `translate3d(${dragX}px, 0, 0)`;
               swipeTarget.style.opacity = String(opacity);
             } else {
-              // Efect elastic (rubber-band) când ești deja la primul sau ultimul tab
               const resistX = Math.max(-26, Math.min(26, dx * 0.14));
               swipeTarget.style.transform = `translate3d(${resistX}px, 0, 0)`;
               swipeTarget.style.opacity = "1";
@@ -1309,7 +1468,7 @@ if (document.readyState === "loading") {
       axisLock = null;
 
       const dt = Math.max(1, Date.now() - startTime);
-      const velocity = Math.abs(currentDx) / dt; // px / ms
+      const velocity = Math.abs(currentDx) / dt;
       const passedThreshold =
         Math.abs(currentDx) >= 52 || (Math.abs(currentDx) >= 26 && velocity >= 0.28);
 
@@ -1354,18 +1513,31 @@ if (document.readyState === "loading") {
 
 
 // ============================================================================
-// 9. BRANDING UPGRADE: LOGO COMPLET TITANLIFT ÎN HEADER + FEREASTRA CLOUD
+// 9. BRANDING UPGRADE + CLICK PE LOGO TITANLIFT → ACASĂ / DASHBOARD
 // ============================================================================
 (() => {
   const LOGO_PRIMARY = "./icons/icon-512x512.png";
   const LOGO_FALLBACK = "./icons/icon-192x192.png";
+
+  function navigateHome() {
+    const allBtns = Array.from(document.querySelectorAll("button, [data-tab], a"));
+    const homeBtn = allBtns.find((el) => {
+      if (el.closest("#titan-cloud-overlay") || el.closest("#titan-duel-overlay")) return false;
+      const r = el.getBoundingClientRect();
+      if (r.width < 10 || r.height < 10) return false;
+      const txt = (el.textContent || "").trim().toLowerCase();
+      return txt === "acasă" || txt === "acasa" || txt === "dashboard" || txt.includes("dashboard") || txt.includes("acasă");
+    });
+
+    if (homeBtn) homeBtn.click();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   function injectBrandLogoStyles() {
     if (document.getElementById("titan-brand-logo-styles")) return;
     const style = document.createElement("style");
     style.id = "titan-brand-logo-styles";
     style.textContent = `
-      /* Containerul noului logo din header */
       .tc-brand-logo-box {
         width: 50px !important;
         height: 50px !important;
@@ -1382,6 +1554,7 @@ if (document.readyState === "loading") {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        cursor: pointer !important;
         transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease !important;
       }
 
@@ -1414,16 +1587,15 @@ if (document.readyState === "loading") {
         user-select: none !important;
       }
 
-      /* Titlul TITANLIFT stilizat în două tonuri lângă logo */
       .tc-brand-title {
         letter-spacing: 0.04em !important;
         line-height: 1.05 !important;
+        cursor: pointer !important;
       }
       .tc-brand-title-accent {
         color: #FF4D00 !important;
       }
 
-      /* Logo discret și în fereastra de autentificare TITANCLOUD */
       .tc-modal-brand-wrap {
         display: flex;
         align-items: center;
@@ -1470,7 +1642,8 @@ if (document.readyState === "loading") {
     for (const el of candidates) {
       if (
         el.closest("#titan-cloud-overlay") ||
-        el.closest("#titan-cloud-pill") ||
+        el.closest("#titan-duel-overlay") ||
+        el.closest("#titan-floating-bar") ||
         el.closest('[data-titan-bottom-nav="true"]')
       ) {
         continue;
@@ -1480,7 +1653,6 @@ if (document.readyState === "loading") {
       const normalized = (el.textContent || "").replace(/\s+/g, "").toUpperCase();
       if (normalized !== "TITANLIFT") continue;
 
-      // Căutăm caseta cu gantera situată imediat la stânga blocului de text TITANLIFT
       let parent = el.parentElement;
       let branch = el;
 
@@ -1497,6 +1669,7 @@ if (document.readyState === "loading") {
             (prevEl.tagName.toLowerCase() === "svg" || prevEl.querySelector("svg, img"));
 
           if (isIconContainer) {
+            let logoTarget = prevEl;
             if (prevEl.dataset.titanLogoUpgraded !== "true") {
               if (prevEl.tagName.toLowerCase() === "svg") {
                 const wrapper = document.createElement("div");
@@ -1504,6 +1677,7 @@ if (document.readyState === "loading") {
                 wrapper.dataset.titanLogoUpgraded = "true";
                 wrapper.appendChild(createLogoImg());
                 prevEl.replaceWith(wrapper);
+                logoTarget = wrapper;
               } else {
                 prevEl.dataset.titanLogoUpgraded = "true";
                 prevEl.classList.add("tc-brand-logo-box");
@@ -1512,11 +1686,24 @@ if (document.readyState === "loading") {
               }
             }
 
-            // Stilizăm și textul TITANLIFT în alb + portocaliu (păstrând exact restul fontului)
+            if (logoTarget.dataset.titanHomeBound !== "true") {
+              logoTarget.dataset.titanHomeBound = "true";
+              logoTarget.title = "Înapoi la Acasă";
+              logoTarget.addEventListener("click", (e) => {
+                e.preventDefault();
+                navigateHome();
+              });
+            }
+
             if (el.dataset.titanTitleUpgraded !== "true") {
               el.dataset.titanTitleUpgraded = "true";
               el.classList.add("tc-brand-title");
               el.innerHTML = 'TITAN<span class="tc-brand-title-accent">LIFT</span>';
+              el.title = "Înapoi la Acasă";
+              el.addEventListener("click", (e) => {
+                e.preventDefault();
+                navigateHome();
+              });
             }
             break;
           }
@@ -1574,3 +1761,604 @@ if (document.readyState === "loading") {
     initBrandLogoUpgrade();
   }
 })();
+
+
+// ============================================================================
+// 10. TITAN SQUAD & DUEL (LINK PRIETENI, CLASAMENT & SCHELET NEON 1 VS. 1)
+// ============================================================================
+const MUSCLE_META = [
+  { key: "chest", label: "Piept" },
+  { key: "back", label: "Spate" },
+  { key: "legs", label: "Picioare" },
+  { key: "shoulders", label: "Umeri" },
+  { key: "arms", label: "Brațe" }
+];
+
+function getTierColor(tier) {
+  const t = String(tier || "").toLowerCase();
+  if (t.includes("elit")) return "#FF6B00";
+  if (t.includes("avans")) return "#C04BFF";
+  if (t.includes("interm")) return "#00E5FF";
+  if (t.includes("încep") || t.includes("incep")) return "#00FF88";
+  return "#334155";
+}
+
+function readLocalPublicStats() {
+  const empty = {
+    level: 0,
+    totalSessions: 0,
+    streakDays: 0,
+    totalVolumeKg: 0,
+    muscles: {
+      chest: { rm: 0, tier: "Neinițiat", bestExercise: "" },
+      back: { rm: 0, tier: "Neinițiat", bestExercise: "" },
+      legs: { rm: 0, tier: "Neinițiat", bestExercise: "" },
+      shoulders: { rm: 0, tier: "Neinițiat", bestExercise: "" },
+      arms: { rm: 0, tier: "Neinițiat", bestExercise: "" }
+    }
+  };
+  try {
+    const raw = window.localStorage.getItem("titanlift_public_stats");
+    if (!raw) return empty;
+    const parsed = JSON.parse(raw);
+    return {
+      level: Number(parsed?.level || 0),
+      totalSessions: Number(parsed?.totalSessions || 0),
+      streakDays: Number(parsed?.streakDays || 0),
+      totalVolumeKg: Number(parsed?.totalVolumeKg || 0),
+      muscles: { ...empty.muscles, ...(parsed?.muscles || {}) }
+    };
+  } catch {
+    return empty;
+  }
+}
+
+function computeTotalRM(muscles) {
+  return MUSCLE_META.reduce((sum, m) => sum + Number(muscles?.[m.key]?.rm || 0), 0);
+}
+
+async function syncPublicProfileToCloud(user) {
+  if (!user) return;
+  try {
+    const stats = readLocalPublicStats();
+    const displayName = user.displayName || (user.email || "").split("@")[0] || "Titan";
+    await setDoc(
+      doc(db, "publicProfiles", user.uid),
+      {
+        uid: user.uid,
+        displayName,
+        level: stats.level,
+        totalSessions: stats.totalSessions,
+        streakDays: stats.streakDays,
+        totalVolumeKg: stats.totalVolumeKg,
+        totalRM: Math.round(computeTotalRM(stats.muscles) * 10) / 10,
+        muscles: stats.muscles,
+        updatedAt: Date.now()
+      },
+      { merge: true }
+    );
+  } catch (err) {
+    console.warn("Public profile sync skipped:", err);
+  }
+}
+
+window.addEventListener("titan-public-stats-updated", () => {
+  if (currentUser && initialSyncDone) {
+    syncPublicProfileToCloud(currentUser);
+  }
+});
+
+// Capturare parametru ?addFriend=UID din link-ul primit pe WhatsApp
+(() => {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const inviterUid = params.get("addFriend");
+    if (inviterUid && inviterUid.length > 5) {
+      sessionStorage.setItem("titan_pending_friend", inviterUid);
+      const cleanUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  } catch {}
+})();
+
+async function checkPendingFriendInvite() {
+  const inviterUid = sessionStorage.getItem("titan_pending_friend");
+  if (!inviterUid || !currentUser) return;
+  if (inviterUid === currentUser.uid) {
+    sessionStorage.removeItem("titan_pending_friend");
+    return;
+  }
+  try {
+    const snap = await getDoc(doc(db, "publicProfiles", inviterUid));
+    const inviterName = snap.exists() ? (snap.data().displayName || "Un prieten") : "Un prieten";
+    openDuelModal({ pendingInvite: { uid: inviterUid, name: inviterName } });
+  } catch (err) {
+    console.warn("Invite check error:", err);
+  }
+}
+
+async function acceptFriendInvite(inviterUid) {
+  if (!currentUser || !inviterUid || inviterUid === currentUser.uid) return;
+  const pair = [currentUser.uid, inviterUid].sort();
+  const pairId = `${pair[0]}_${pair[1]}`;
+  await setDoc(doc(db, "friendships", pairId), {
+    users: pair,
+    createdAt: Date.now()
+  });
+  sessionStorage.removeItem("titan_pending_friend");
+  await syncPublicProfileToCloud(currentUser);
+  showCloudToast("Prieten adăugat în Titan Squad! ⚔️");
+}
+
+async function removeFriend(friendUid) {
+  if (!currentUser || !friendUid) return;
+  const pair = [currentUser.uid, friendUid].sort();
+  const pairId = `${pair[0]}_${pair[1]}`;
+  await deleteDoc(doc(db, "friendships", pairId));
+  showCloudToast("Prieten eliminat din Squad.");
+}
+
+async function fetchSquadProfiles() {
+  if (!currentUser) return { me: null, friends: [] };
+  const myStats = readLocalPublicStats();
+  const me = {
+    uid: currentUser.uid,
+    displayName: currentUser.displayName || (currentUser.email || "").split("@")[0] || "Tu",
+    level: myStats.level,
+    totalSessions: myStats.totalSessions,
+    streakDays: myStats.streakDays,
+    totalVolumeKg: myStats.totalVolumeKg,
+    totalRM: Math.round(computeTotalRM(myStats.muscles) * 10) / 10,
+    muscles: myStats.muscles,
+    isMe: true
+  };
+
+  const q = query(collection(db, "friendships"), where("users", "array-contains", currentUser.uid));
+  const snap = await getDocs(q);
+  const friendUids = [];
+  snap.forEach((d) => {
+    const users = d.data()?.users || [];
+    const other = users.find((u) => u !== currentUser.uid);
+    if (other && !friendUids.includes(other)) friendUids.push(other);
+  });
+
+  const friends = [];
+  for (const fUid of friendUids) {
+    try {
+      const fSnap = await getDoc(doc(db, "publicProfiles", fUid));
+      if (fSnap.exists()) {
+        const data = fSnap.data();
+        friends.push({
+          ...data,
+          uid: fUid,
+          totalRM: Number(data.totalRM || computeTotalRM(data.muscles))
+        });
+      }
+    } catch {}
+  }
+
+  return { me, friends };
+}
+
+function buildNeonMuscleSvg(muscles) {
+  const cChest = getTierColor(muscles?.chest?.tier);
+  const cBack = getTierColor(muscles?.back?.tier);
+  const cLegs = getTierColor(muscles?.legs?.tier);
+  const cShoulders = getTierColor(muscles?.shoulders?.tier);
+  const cArms = getTierColor(muscles?.arms?.tier);
+
+  const glow = (col) => col === "#334155" ? "" : `filter: drop-shadow(0 0 6px ${col});`;
+
+  return `
+    <svg viewBox="0 0 200 290" class="td-svg" aria-label="Schelet Forță Mușchi">
+      <!-- Cap & Gât -->
+      <circle cx="100" cy="30" r="18" fill="#1E293B" stroke="#94A3B8" stroke-width="2" />
+      <rect x="92" y="48" width="16" height="12" rx="4" fill="#1E293B" stroke="#64748B" stroke-width="1.5" />
+
+      <!-- Umeri (Deltoizi) -->
+      <ellipse cx="62" cy="76" rx="16" ry="13" fill="${cShoulders}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cShoulders)}" />
+      <ellipse cx="138" cy="76" rx="16" ry="13" fill="${cShoulders}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cShoulders)}" />
+
+      <!-- Piept -->
+      <path d="M74 66 Q100 60 126 66 L124 102 Q100 110 76 102 Z" fill="${cChest}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cChest)}" />
+
+      <!-- Spate (Lats vizibili lateral pe tors) -->
+      <path d="M68 92 L76 102 L80 132 L72 122 Z" fill="${cBack}" stroke="#E2E8F0" stroke-width="1.2" style="${glow(cBack)}" />
+      <path d="M132 92 L124 102 L120 132 L128 122 Z" fill="${cBack}" stroke="#E2E8F0" stroke-width="1.2" style="${glow(cBack)}" />
+
+      <!-- Abdomen / Core (neutru) -->
+      <rect x="81" y="108" width="38" height="44" rx="8" fill="#1E293B" stroke="#64748B" stroke-width="1.5" />
+
+      <!-- Brațe (Biceps/Triceps/Antebraț) -->
+      <rect x="44" y="90" width="16" height="62" rx="8" fill="${cArms}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cArms)}" />
+      <rect x="140" y="90" width="16" height="62" rx="8" fill="${cArms}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cArms)}" />
+
+      <!-- Picioare (Cvadriceps + Gambe) -->
+      <rect x="73" y="158" width="23" height="62" rx="10" fill="${cLegs}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cLegs)}" />
+      <rect x="104" y="158" width="23" height="62" rx="10" fill="${cLegs}" stroke="#E2E8F0" stroke-width="1.5" style="${glow(cLegs)}" />
+      <rect x="76" y="224" width="17" height="52" rx="8" fill="${cLegs}" stroke="#E2E8F0" stroke-width="1.3" style="${glow(cLegs)}" />
+      <rect x="107" y="224" width="17" height="52" rx="8" fill="${cLegs}" stroke="#E2E8F0" stroke-width="1.3" style="${glow(cLegs)}" />
+    </svg>
+  `;
+}
+
+function injectDuelStyles() {
+  if (document.getElementById("titan-duel-styles")) return;
+  const style = document.createElement("style");
+  style.id = "titan-duel-styles";
+  style.textContent = `
+    #titan-duel-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10001;
+      display: none;
+      background: #050507;
+      color: #F5F5F7;
+      overflow-y: auto;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    }
+    #titan-duel-overlay.open { display: block; }
+    .td-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+    .td-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .td-back {
+      background: #18181C;
+      color: #F5F5F7;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .td-heading {
+      font-family: "Barlow Condensed", system-ui, sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .td-heading span { color: #FF4D00; }
+    .td-box {
+      background: #111114;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .td-filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+    .td-chip {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #18181C;
+      color: #A1A1AA;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .td-chip.active {
+      background: #FF4D00;
+      color: #FFF;
+      border-color: #FF4D00;
+    }
+    .td-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 14px;
+      background: #18181C;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+    .td-row:hover { border-color: rgba(255, 77, 0, 0.5); }
+    .td-row.me { border-color: rgba(255, 77, 0, 0.35); background: rgba(255, 77, 0, 0.08); }
+    .td-rank { font-size: 16px; font-weight: 800; width: 28px; color: #FF6B00; }
+    .td-name { font-size: 14px; font-weight: 700; }
+    .td-sub { font-size: 11px; color: #8E8E93; margin-top: 2px; }
+    .td-score { font-size: 15px; font-weight: 800; color: #FFF; text-align: right; }
+    .td-invite-row { display: flex; gap: 8px; margin-top: 10px; }
+    .td-svg { width: 170px; height: 245px; display: block; margin: 0 auto; }
+    .td-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #A1A1AA;
+    }
+    .td-leg-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+    .td-duel-score {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 800;
+      margin: 8px 0 14px;
+    }
+    .td-duel-score span { color: #FF4D00; }
+    .td-comp-row {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .td-comp-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .td-comp-bars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .td-bar-track {
+      height: 7px;
+      background: #27272A;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .td-bar-fill-me { height: 100%; background: #FF4D00; border-radius: 999px; }
+    .td-bar-fill-fr { height: 100%; background: #00E5FF; border-radius: 999px; }
+  `;
+  document.head.appendChild(style);
+}
+
+let duelFilter = "total";
+let selectedDuelFriend = null;
+let cachedSquad = { me: null, friends: [] };
+
+async function openDuelModal(opts = {}) {
+  if (!currentUser) {
+    openCloudModal();
+    return;
+  }
+  injectDuelStyles();
+  let overlay = document.getElementById("titan-duel-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "titan-duel-overlay";
+    overlay.setAttribute("role", "dialog");
+    document.body.appendChild(overlay);
+  }
+  overlay.classList.add("open");
+  overlay.innerHTML = `<div class="td-wrap"><p style="color:#8E8E93;text-align:center;margin-top:40px;">Se încarcă Titan Squad...</p></div>`;
+
+  await syncPublicProfileToCloud(currentUser);
+  cachedSquad = await fetchSquadProfiles();
+  selectedDuelFriend = null;
+  renderDuelView(opts.pendingInvite || null);
+}
+
+function closeDuelModal() {
+  const overlay = document.getElementById("titan-duel-overlay");
+  if (overlay) overlay.classList.remove("open");
+}
+
+function renderDuelView(pendingInvite = null) {
+  const overlay = document.getElementById("titan-duel-overlay");
+  if (!overlay) return;
+
+  const { me, friends } = cachedSquad;
+  const inviteLink = `${window.location.origin}${window.location.pathname}?addFriend=${currentUser.uid}`;
+
+  // Ecran 1 vs. 1 cu prietenul selectat
+  if (selectedDuelFriend) {
+    const f = selectedDuelFriend;
+    let myWins = 0;
+    let frWins = 0;
+    const rowsHtml = MUSCLE_META.map((m) => {
+      const myRm = Number(me?.muscles?.[m.key]?.rm || 0);
+      const frRm = Number(f?.muscles?.[m.key]?.rm || 0);
+      const maxRm = Math.max(1, myRm, frRm);
+      if (myRm > frRm) myWins++;
+      else if (frRm > myRm) frWins++;
+      return `
+        <div class="td-comp-row">
+          <div class="td-comp-head">
+            <span style="color:#FF6B00;">${myRm} kg ${myRm > frRm ? "👑" : ""}</span>
+            <span style="color:#A1A1AA;">${m.label}</span>
+            <span style="color:#00E5FF;">${frRm > myRm ? "👑" : ""} ${frRm} kg</span>
+          </div>
+          <div class="td-comp-bars">
+            <div class="td-bar-track"><div class="td-bar-fill-me" style="width:${Math.round((myRm / maxRm) * 100)}%"></div></div>
+            <div class="td-bar-track"><div class="td-bar-fill-fr" style="width:${Math.round((frRm / maxRm) * 100)}%"></div></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    overlay.innerHTML = `
+      <div class="td-wrap">
+        <div class="td-topbar">
+          <button type="button" class="td-back" id="td-back-list">← Înapoi la Squad</button>
+          <h3 class="td-heading">DUEL <span>1 VS 1</span></h3>
+        </div>
+
+        <div class="td-box" style="text-align:center;">
+          <div style="font-size:15px;font-weight:800;margin-bottom:4px;">${f.displayName} • Nivel ${f.level || 0}</div>
+          <div style="font-size:12px;color:#8E8E93;margin-bottom:12px;">Profil Forță Mușchi (fără recuperare & fără jurnal)</div>
+          ${buildNeonMuscleSvg(f.muscles)}
+          <div class="td-legend">
+            <span><i class="td-leg-dot" style="background:#00FF88;"></i>Începător</span>
+            <span><i class="td-leg-dot" style="background:#00E5FF;"></i>Intermediar</span>
+            <span><i class="td-leg-dot" style="background:#C04BFF;"></i>Avansat</span>
+            <span><i class="td-leg-dot" style="background:#FF6B00;"></i>Elită</span>
+          </div>
+        </div>
+
+        <div class="td-box">
+          <div class="td-duel-score">Tu <span>${myWins} – ${frWins}</span> ${f.displayName}</div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#8E8E93;margin-bottom:8px;">
+            <span>🟠 Tu (${me.totalSessions || 0} sesiuni)</span>
+            <span>🔵 ${f.displayName} (${f.totalSessions || 0} sesiuni)</span>
+          </div>
+          ${rowsHtml}
+        </div>
+
+        <button type="button" class="tc-btn-danger" id="td-remove-friend">Elimină pe ${f.displayName} din Squad</button>
+      </div>
+    `;
+
+    overlay.querySelector("#td-back-list").onclick = () => {
+      selectedDuelFriend = null;
+      renderDuelView();
+    };
+    overlay.querySelector("#td-remove-friend").onclick = async () => {
+      if (!confirm(`Sigur vrei să îl elimini pe ${f.displayName} din Titan Squad?`)) return;
+      await removeFriend(f.uid);
+      cachedSquad = await fetchSquadProfiles();
+      selectedDuelFriend = null;
+      renderDuelView();
+    };
+    return;
+  }
+
+  // Ecran principal: Invitație în așteptare + Clasament Squad + Link Invitație
+  const allMembers = [me, ...friends].filter(Boolean);
+  const getMetric = (p) => {
+    if (duelFilter === "total") return Number(p.totalRM || 0);
+    return Number(p.muscles?.[duelFilter]?.rm || 0);
+  };
+  allMembers.sort((a, b) => getMetric(b) - getMetric(a));
+
+  const filterChips = [
+    { key: "total", label: "Total 1RM" },
+    ...MUSCLE_META
+  ].map((c) => `
+    <button type="button" class="td-chip ${duelFilter === c.key ? "active" : ""}" data-filter="${c.key}">${c.label}</button>
+  `).join("");
+
+  const leaderboardHtml = allMembers.map((p, idx) => {
+    const score = getMetric(p);
+    const medal = idx === 0 && score > 0 ? "👑" : `#${idx + 1}`;
+    return `
+      <div class="td-row ${p.isMe ? "me" : ""}" data-uid="${p.uid}">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="td-rank">${medal}</div>
+          <div>
+            <div class="td-name">${p.displayName} ${p.isMe ? "(Tu)" : ""}</div>
+            <div class="td-sub">Nivel ${p.level || 0} • ${p.totalSessions || 0} sesiuni • Streak ${p.streakDays || 0}z</div>
+          </div>
+        </div>
+        <div class="td-score">
+          ${score} kg
+          ${!p.isMe ? `<div style="font-size:10px;color:#FF6B00;font-weight:700;">Vezi Duel ›</div>` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const inviteBannerHtml = pendingInvite ? `
+    <div class="td-box" style="border-color:rgba(255,77,0,0.6);background:rgba(255,77,0,0.1);">
+      <div style="font-size:14px;font-weight:800;margin-bottom:6px;">⚔️ ${pendingInvite.name} te-a invitat în Titan Squad!</div>
+      <div style="font-size:12px;color:#D4D4D8;margin-bottom:10px;">Acceptă ca să vă vedeți forța pe grupe musculare și să vă duelați 1 vs 1.</div>
+      <button type="button" class="tc-btn-primary" id="td-accept-invite">Acceptă Duelul ✓</button>
+    </div>
+  ` : "";
+
+  overlay.innerHTML = `
+    <div class="td-wrap">
+      <div class="td-topbar">
+        <button type="button" class="td-back" id="td-close">← Înapoi</button>
+        <h3 class="td-heading">TITAN <span>SQUAD</span></h3>
+      </div>
+
+      ${inviteBannerHtml}
+
+      <div class="td-box">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">🏆 Clasament Squad (${allMembers.length})</div>
+        <div class="td-filters">${filterChips}</div>
+        ${leaderboardHtml}
+        ${friends.length === 0 ? `<div style="font-size:12px;color:#8E8E93;text-align:center;margin-top:8px;">Încă nu ai prieteni în Squad. Trimite-le link-ul tău de mai jos!</div>` : ""}
+      </div>
+
+      <div class="td-box">
+        <div style="font-size:13px;font-weight:800;margin-bottom:4px;">🔗 Invită un prieten la Duel</div>
+        <div style="font-size:12px;color:#8E8E93;">Prietenii văd doar nivelul de forță al mușchilor (fără jurnalul tău de antrenamente și fără recuperare).</div>
+        <div class="td-invite-row">
+          <button type="button" class="tc-btn-primary" id="td-copy-link" style="margin-top:0;">📋 Copiază Link</button>
+          <button type="button" class="tc-btn-secondary" id="td-share-link" style="margin-top:0;">📤 Trimite</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  overlay.querySelector("#td-close").onclick = closeDuelModal;
+
+  const acceptBtn = overlay.querySelector("#td-accept-invite");
+  if (acceptBtn && pendingInvite) {
+    acceptBtn.onclick = async () => {
+      acceptBtn.disabled = true;
+      await acceptFriendInvite(pendingInvite.uid);
+      cachedSquad = await fetchSquadProfiles();
+      renderDuelView(null);
+    };
+  }
+
+  overlay.querySelectorAll(".td-chip").forEach((chip) => {
+    chip.onclick = () => {
+      duelFilter = chip.dataset.filter;
+      renderDuelView(pendingInvite);
+    };
+  });
+
+  overlay.querySelectorAll(".td-row").forEach((row) => {
+    const uid = row.dataset.uid;
+    const friend = friends.find((fr) => fr.uid === uid);
+    if (friend) {
+      row.onclick = () => {
+        selectedDuelFriend = friend;
+        renderDuelView();
+      };
+    }
+  });
+
+  overlay.querySelector("#td-copy-link").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteLink);
+      showCloudToast("Link de Duel copiat! Trimite-l prietenilor pe WhatsApp.");
+    } catch {
+      prompt("Copiază link-ul tău de Duel:", inviteLink);
+    }
+  };
+
+  overlay.querySelector("#td-share-link").onclick = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "TitanLift — Duel Squad",
+          text: "Hai în Titan Squad pe TitanLift să vedem cine ridică mai mult! ⚔️",
+          url: inviteLink
+        });
+        return;
+      } catch {}
+    }
+    window.open(`https://wa.me/?text=${encodeURIComponent("Hai în Titan Squad pe TitanLift să vedem cine ridică mai mult! ⚔️ " + inviteLink)}`, "_blank");
+  };
+}
